@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Butterfly 🦋 — Discord Mobile Presence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Iconify SVG framework -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #0b0914;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-purple: #8b5cf6;
+      --accent-violet: #6d28d9;
+      --accent-cyan: #06b6d4;
+      --accent-pink: #ec4899;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --status-green: #10b981;
+      --status-yellow: #f59e0b;
+      --status-red: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at 80% 20%, #1e1b4b 0%, #0b0914 60%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Window Header */
+    .header {
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(11, 9, 20, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-app-region: drag;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      -webkit-app-region: no-drag;
+    }
+
+    .brand-logo {
+      font-size: 28px;
+      background: linear-gradient(135deg, #a78bfa, #06b6d4, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      filter: drop-shadow(0 0 12px rgba(167, 139, 250, 0.4));
+    }
+
+    .brand-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff, #c4b5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      -webkit-app-region: no-drag;
+    }
+
+    .nav-tab {
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-tab.active {
+      background: rgba(139, 92, 246, 0.2);
+      color: #c4b5fd;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      -webkit-app-region: no-drag;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--status-yellow);
+      box-shadow: 0 0 10px var(--status-yellow);
+      transition: all 0.3s ease;
+    }
+
+    .dot.connected {
+      background: var(--status-green);
+      box-shadow: 0 0 12px var(--status-green);
+    }
+
+    .dot.disconnected {
+      background: var(--status-red);
+      box-shadow: 0 0 12px var(--status-red);
+    }
+
+    /* Container */
+    .container {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* QR Code Display */
+    .qr-box {
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 16px;
+      width: 170px;
+      height: 170px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 32px rgba(124, 58, 237, 0.25);
+      border: 3px solid rgba(139, 92, 246, 0.4);
+    }
+
+    .qr-box img {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+    }
+
+    .code-display {
+      text-align: center;
+    }
+
+    .code-badge {
+      display: inline-block;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      padding: 10px 24px;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(6, 182, 212, 0.25));
+      border: 1px solid rgba(139, 92, 246, 0.5);
+      border-radius: 14px;
+      color: #e9d5ff;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+    }
+
+    .sub-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* Discord Presence Mockup */
+    .discord-card {
+      background: #18191c;
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      border: 1px solid #2f3136;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discord-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4, #ec4899);
+    }
+
+    .app-icon-wrapper {
+      position: relative;
+      width: 68px;
+      height: 68px;
+    }
+
+    .app-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 16px;
+      background: #2f3136;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .app-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .phone-badge {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      background: #5865f2;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border: 3px solid #18191c;
+    }
+
+    .presence-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .presence-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: #b9bbbe;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .presence-app-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .presence-subtitle {
+      font-size: 13px;
+      color: #dcddde;
+    }
+
+    .presence-timer {
+      font-size: 12px;
+      color: #b9bbbe;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Controls Bar */
+    .sim-bar {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .sim-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sim-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 9px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: rgba(139, 92, 246, 0.25);
+      border-color: var(--accent-purple);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-clear {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .btn-clear:hover {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: var(--status-red);
+    }
+
+    /* Footer */
+    .footer {
+      padding: 14px 24px;
+      border-top: 1px solid var(--card-border);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(11, 9, 20, 0.6);
+      backdrop-filter: blur(12px);
+    }
+
+    .rpc-tag {
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .rpc-tag.connected {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--status-green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .rpc-tag.disconnected {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--status-red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Window Header -->
+  <div class="header">
+    <div class="brand">
+      <span class="brand-logo">
+        <iconify-icon icon="lucide:butterfly" width="30"></iconify-icon>
+      </span>
+      <span class="brand-title">Butterfly</span>
+    </div>
+
+    <div class="nav-tabs">
+      <div class="nav-tab active">
+        <iconify-icon icon="heroicons:sparkles" width="16"></iconify-icon> Dashboard
+      </div>
+      <div class="nav-tab" onclick="alert('Mobile App QR Scanner: Point your Android camera at the QR code on the left!')">
+        <iconify-icon icon="heroicons:device-phone-mobile" width="16"></iconify-icon> Devices
+      </div>
+    </div>
+
+    <div class="status-badge">
+      <div id="statusDot" class="dot"></div>
+      <span id="statusText">Connecting...</span>
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="container">
+    
+    <!-- Left Card: Pairing -->
+    <div class="card">
+      <div class="card-title">
+        <iconify-icon icon="heroicons:qr-code" width="18"></iconify-icon>
+        Pair Android Phone
+      </div>
+
+      <div class="qr-box">
+        <img id="qrImage" src="" alt="Pairing QR Code">
+      </div>
+
+      <div class="code-display">
+        <div class="code-badge" id="pairingCode">BFLY-----</div>
+        <div class="sub-text">Scan QR code or enter 6-digit code in Butterfly Mobile App</div>
+      </div>
+    </div>
+
+    <!-- Right Card: Live Discord Presence Preview -->
+    <div class="card">
+      <div class="card-title">
+        <iconify-icon icon="logos:discord-icon" width="18"></iconify-icon>
+        Live Profile Presence
+      </div>
+
+      <div class="discord-card">
+        <div class="app-icon-wrapper">
+          <div class="app-icon" id="discordAppIcon">
+            <img id="presenceLogo" src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/spotify.png" alt="App Logo">
+          </div>
+          <div class="phone-badge">
+            <iconify-icon icon="heroicons:device-phone-mobile" width="12" style="color: white;"></iconify-icon>
+          </div>
+        </div>
+
+        <div class="presence-details">
+          <div class="presence-header">PLAYING A GAME</div>
+          <div class="presence-app-name" id="discordAppName">Spotify</div>
+          <div class="presence-subtitle" id="discordSubTitle">On Android Phone</div>
+          <div class="presence-timer">
+            <iconify-icon icon="heroicons:clock" width="14"></iconify-icon>
+            <span id="discordTimer">00:00 elapsed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Simulator Tools -->
+      <div class="sim-bar">
+        <div class="sim-title">
+          <span>🧪 QUICK TESTER</span>
+          <span>Click any app to test live status</span>
+        </div>
+        <div class="sim-buttons">
+          <button class="btn" onclick="simActivity('com.spotify.music', 'Spotify', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/spotify.png')">
+            <iconify-icon icon="logos:spotify-icon" width="16"></iconify-icon> Spotify
+          </button>
+          <button class="btn" onclick="simActivity('com.google.android.youtube', 'YouTube', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/youtube.png')">
+            <iconify-icon icon="logos:youtube-icon" width="16"></iconify-icon> YouTube
+          </button>
+          <button class="btn" onclick="simActivity('com.netflix.mediaclient', 'Netflix', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/netflix.png')">
+            <iconify-icon icon="logos:netflix-icon" width="16"></iconify-icon> Netflix
+          </button>
+          <button class="btn" onclick="simActivity('tv.twitch.android.app', 'Twitch', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/twitch.png')">
+            <iconify-icon icon="logos:twitch" width="16"></iconify-icon> Twitch
+          </button>
+          <button class="btn" onclick="simActivity('com.instagram.android', 'Instagram', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/instagram.png')">
+            <iconify-icon icon="logos:instagram-icon" width="16"></iconify-icon> Instagram
+          </button>
+          <button class="btn" onclick="simActivity('com.reddit.frontpage', 'Reddit', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/reddit.png')">
+            <iconify-icon icon="logos:reddit-icon" width="16"></iconify-icon> Reddit
+          </button>
+          <button class="btn" onclick="simActivity('com.duolingo', 'Duolingo', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/duolingo.png')">
+            <iconify-icon icon="logos:duolingo-icon" width="16"></iconify-icon> Duolingo
+          </button>
+          <button class="btn btn-clear" onclick="clearPresenceUI()">
+            <iconify-icon icon="heroicons:stop" width="16"></iconify-icon> Clear Status
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span>Butterfly v1.0.0 • Discord Application: 1532431212407164968</span>
+    <div id="discordRpcStatus" class="rpc-tag connected" onclick="retryDiscordRpc()">
+      <iconify-icon icon="heroicons:arrow-path" width="14"></iconify-icon>
+      <span id="rpcStatusLabel">Discord RPC: Connected</span>
+    </div>
+  </div>
+
+  <script>
+    const SERVER_URL = 'http://localhost:4000';
+    let pairingId = null;
+    let deviceToken = null;
+    let ws = null;
+    let timerInterval = null;
+    let startTime = Date.now();
+
+    async function initDesktop() {
+      startElapsedTimer();
+
+      try {
+        const res = await fetch(`${SERVER_URL}/api/pair/generate`, { method: 'POST' });
+        const data = await res.json();
+        
+        if (data.success) {
+          pairingId = data.pairingId;
+          deviceToken = data.deviceToken;
+
+          document.getElementById('pairingCode').innerText = data.code;
+          document.getElementById('qrImage').src = data.qrDataUrl;
+
+          connectWebSocket(data.pairingId);
+        }
+      } catch (err) {
+        console.error('Failed to connect to Butterfly Server:', err);
+        updateStatus('Server Offline', 'disconnected');
+      }
+
+      if (window.electronAPI && window.electronAPI.getRpcStatus) {
+        window.electronAPI.getRpcStatus();
+      }
+    }
+
+    function connectWebSocket(pId) {
+      ws = new WebSocket(`ws://localhost:4000/ws?pairingId=${pId}`);
+
+      ws.onopen = () => {
+        updateStatus('Waiting for Phone...', 'waiting');
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log('[Desktop WS Received]', data);
+
+        if (data.type === 'MOBILE_PAIRED') {
+          updateStatus('Phone Connected', 'connected');
+        } else if (data.type === 'ACTIVITY_UPDATE') {
+          updateStatus('Active • ' + data.appName, 'connected');
+          renderPresence(data);
+          
+          if (window.electronAPI) {
+            window.electronAPI.updatePresence(data);
+          }
+        } else if (data.type === 'ACTIVITY_CLEAR') {
+          clearPresenceUI();
+        }
+      };
+
+      ws.onclose = () => {
+        updateStatus('Disconnected', 'disconnected');
+        setTimeout(() => connectWebSocket(pId), 3000);
+      };
+    }
+
+    function updateStatus(text, state) {
+      const dot = document.getElementById('statusDot');
+      const statusText = document.getElementById('statusText');
+
+      statusText.innerText = text;
+      dot.className = 'dot';
+      if (state === 'connected') dot.classList.add('connected');
+      if (state === 'disconnected') dot.classList.add('disconnected');
+    }
+
+    function renderPresence(data) {
+      document.getElementById('discordAppName').innerText = data.appName;
+      document.getElementById('discordSubTitle').innerText = 'On Android Phone';
+      
+      const logoImg = document.getElementById('presenceLogo');
+      logoImg.src = data.logoUrl || data.icon || 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/android.png';
+
+      startElapsedTimer();
+    }
+
+    function startElapsedTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      startTime = Date.now();
+      
+      timerInterval = setInterval(() => {
+        const elapsedSec = Math.floor((Date.now() - startTime) / 1000);
+        const mins = Math.floor(elapsedSec / 60);
+        const secs = elapsedSec % 60;
+        document.getElementById('discordTimer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} elapsed`;
+      }, 1000);
+    }
+
+    function clearPresenceUI() {
+      document.getElementById('discordAppName').innerText = 'Idle / Hidden';
+      document.getElementById('discordSubTitle').innerText = 'Paused by privacy settings';
+      document.getElementById('discordTimer').innerText = '00:00 elapsed';
+      document.getElementById('presenceLogo').src = 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/android.png';
+      if (timerInterval) clearInterval(timerInterval);
+
+      if (window.electronAPI) {
+        window.electronAPI.updatePresence({ clear: true });
+      }
+    }
+
+    async function simActivity(packageName, appName, logoUrl) {
+      const activityData = {
+        appName,
+        packageName,
+        logoUrl,
+        startedAt: Date.now(),
+      };
+
+      // 1. Instantly update Desktop UI Preview
+      renderPresence(activityData);
+      updateStatus('Active • ' + appName, 'connected');
+
+      // 2. Instantly update Discord RPC on your profile!
+      if (window.electronAPI) {
+        window.electronAPI.updatePresence(activityData);
+      }
+
+      // 3. Post to Server if token exists
+      if (deviceToken) {
+        try {
+          await fetch(`${SERVER_URL}/api/activity`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              deviceToken,
+              packageName,
+              appName,
+            }),
+          });
+        } catch (e) {}
+      }
+    }
+
+    function retryDiscordRpc() {
+      if (window.electronAPI) {
+        document.getElementById('rpcStatusLabel').innerText = 'Connecting...';
+        window.electronAPI.retryRpc();
+      }
+    }
+
+    // Listen for Electron main process Discord RPC events
+    if (window.electronAPI && window.electronAPI.onRpcStatusChange) {
+      window.electronAPI.onRpcStatusChange((event) => {
+        const tag = document.getElementById('discordRpcStatus');
+        const label = document.getElementById('rpcStatusLabel');
+
+        if (event.status === 'connected') {
+          tag.className = 'rpc-tag connected';
+          label.innerText = 'Discord RPC: Connected';
+        } else {
+          tag.className = 'rpc-tag disconnected';
+          label.innerText = `Discord RPC: Open Discord desktop app! (Click to Retry)`;
+        }
+      });
+    }
+
+    window.onload = initDesktop;
+  </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "butterfly-mobile",
+  "version": "1.0.0",
+  "description": "Butterfly Mobile App & Privacy Control Center",
+  "type": "module",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

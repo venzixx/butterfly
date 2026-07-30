@@ -1,0 +1,17 @@
+{
+  "name": "butterfly-server",
+  "version": "1.0.0",
+  "description": "Butterfly Cloud Server for Discord Rich Presence relay & device pairing",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "qrcode": "^1.5.3",
+    "ws": "^8.17.1"
+  }
+}
