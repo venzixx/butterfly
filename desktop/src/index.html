@@ -526,7 +526,7 @@
   </div>
 
   <script>
-    const SERVER_URL = 'http://localhost:4000';
+    const SERVER_URL = 'https://butterfly-2dyb.onrender.com';
     let pairingId = null;
     let deviceToken = null;
     let ws = null;
@@ -560,7 +560,9 @@
     }
 
     function connectWebSocket(pId) {
-      ws = new WebSocket(`ws://localhost:4000/ws?pairingId=${pId}`);
+      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsHost = 'butterfly-2dyb.onrender.com';
+      ws = new WebSocket(`wss://${wsHost}/ws?pairingId=${pId}`);
 
       ws.onopen = () => {
         updateStatus('Waiting for Phone...', 'waiting');
