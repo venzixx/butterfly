@@ -17,6 +17,32 @@ const pairings = new Map(); // pairingId -> { code, deviceToken, desktopWs, mobi
 const codeToPairingId = new Map(); // 6-digit code -> pairingId
 const privacySettings = new Map(); // deviceToken -> { defaultAction: 'allow', excludedApps: [] }
 
+// Root Welcome & Health Check Route
+app.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>Butterfly Cloud Server 🦋</title>
+        <style>
+          body { font-family: system-ui, sans-serif; background: #0f0c20; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; }
+          .card { background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+          h1 { background: linear-gradient(135deg, #a78bfa, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 10px 0; }
+          p { color: #9ca3af; margin: 5px 0; }
+          .badge { display: inline-block; background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); padding: 6px 14px; border-radius: 20px; font-weight: bold; margin-top: 15px; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1>🦋 Butterfly Cloud Server</h1>
+          <p>Discord Mobile Presence Relay & Device Pairing</p>
+          <div class="badge">● SERVER ONLINE & READY</div>
+        </div>
+      </body>
+    </html>
+  `);
+});
+
 // App Icon Mapping table (package name / app name -> Iconify icon name)
 const POPULAR_APP_ICONS = {
   'com.google.android.youtube': { name: 'YouTube', icon: 'logos:youtube-icon', category: 'video' },
@@ -32,15 +58,10 @@ const POPULAR_APP_ICONS = {
   'com.mojang.minecraftpe': { name: 'Minecraft', icon: 'logos:minecraft', category: 'game' },
 };
 
-// Generate 6-digit pairing code (e.g. BFLY-4921)
 function generatePairingCode() {
   const num = Math.floor(1000 + Math.random() * 9000);
   return `BFLY-${num}`;
 }
-
-// -------------------------------------------------------------
-// REST Endpoints
-// -------------------------------------------------------------
 
 // 1. Desktop generates pairing session (QR + Code)
 app.post('/api/pair/generate', async (req, res) => {
@@ -48,7 +69,6 @@ app.post('/api/pair/generate', async (req, res) => {
   const code = generatePairingCode();
   const deviceToken = crypto.randomUUID();
 
-  // Create QR Code payload
   const qrPayload = JSON.stringify({
     serverUrl: req.headers.host,
     pairingId,
@@ -60,7 +80,7 @@ app.post('/api/pair/generate', async (req, res) => {
     const qrDataUrl = await QRCode.toDataURL(qrPayload, {
       margin: 2,
       color: {
-        dark: '#7C3AED', // Butterfly Violet
+        dark: '#7C3AED',
         light: '#FFFFFF',
       },
     });
@@ -111,7 +131,6 @@ app.post('/api/pair/verify', (req, res) => {
   session.paired = true;
   session.mobileConnected = true;
 
-  // Initialize privacy settings if not existing
   if (!privacySettings.has(session.deviceToken)) {
     privacySettings.set(session.deviceToken, {
       defaultAction: 'allow',
@@ -119,7 +138,6 @@ app.post('/api/pair/verify', (req, res) => {
     });
   }
 
-  // Notify desktop via WebSocket if connected
   if (session.desktopWs && session.desktopWs.readyState === WebSocket.OPEN) {
     session.desktopWs.send(JSON.stringify({
       type: 'MOBILE_PAIRED',
@@ -146,7 +164,6 @@ app.post('/api/activity', (req, res) => {
     return res.status(400).json({ error: 'Missing deviceToken' });
   }
 
-  // Find session by deviceToken
   let session = null;
   for (const s of pairings.values()) {
     if (s.deviceToken === deviceToken) {
@@ -159,12 +176,10 @@ app.post('/api/activity', (req, res) => {
     return res.status(401).json({ error: 'Unrecognized device token. Please re-pair.' });
   }
 
-  // Check Privacy Exclusion rules
   const userPrivacy = privacySettings.get(deviceToken) || { excludedApps: [] };
   if (userPrivacy.excludedApps.includes(packageName)) {
     console.log(`[Privacy] App ${packageName} is blacklisted by user. Skipping broadcast.`);
     
-    // Broadcast cleared status if app is hidden
     if (session.desktopWs && session.desktopWs.readyState === WebSocket.OPEN) {
       session.desktopWs.send(JSON.stringify({
         type: 'ACTIVITY_CLEAR',
@@ -174,7 +189,6 @@ app.post('/api/activity', (req, res) => {
     return res.json({ success: true, filtered: true, reason: 'App blacklisted by privacy settings' });
   }
 
-  // Enrich with Iconify icon info
   const iconInfo = POPULAR_APP_ICONS[packageName] || {
     name: appName || 'Mobile App',
     icon: 'heroicons:device-phone-mobile',
@@ -192,7 +206,6 @@ app.post('/api/activity', (req, res) => {
 
   session.lastActivity = activityPayload;
 
-  // Broadcast to Desktop client via WebSocket
   if (session.desktopWs && session.desktopWs.readyState === WebSocket.OPEN) {
     session.desktopWs.send(JSON.stringify(activityPayload));
   }
@@ -221,7 +234,6 @@ app.post('/api/privacy/settings', (req, res) => {
   res.json({ success: true, message: 'Privacy settings updated' });
 });
 
-// Status check endpoint
 app.get('/api/status/:pairingId', (req, res) => {
   const session = pairings.get(req.params.pairingId);
   if (!session) return res.status(404).json({ error: 'Session not found' });
@@ -232,9 +244,6 @@ app.get('/api/status/:pairingId', (req, res) => {
   });
 });
 
-// -------------------------------------------------------------
-// WebSocket Handler (Desktop connects here)
-// -------------------------------------------------------------
 wss.on('connection', (ws, req) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const pairingId = url.searchParams.get('pairingId');
@@ -245,7 +254,6 @@ wss.on('connection', (ws, req) => {
     const session = pairings.get(pairingId);
     session.desktopWs = ws;
 
-    // Send current session status on connect
     ws.send(JSON.stringify({
       type: 'INIT_STATUS',
       paired: session.paired,
@@ -267,10 +275,10 @@ wss.on('connection', (ws, req) => {
   });
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {
   console.log(`
-  🦋 Butterfly Cloud Server running on http://localhost:${PORT}
+  🦋 Butterfly Cloud Server running on port ${PORT}
   -------------------------------------------------------------
   - REST API: http://localhost:${PORT}/api
   - WebSocket: ws://localhost:${PORT}/ws
