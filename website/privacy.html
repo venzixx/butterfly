@@ -18,9 +18,10 @@
       --text-muted: #9ca3af;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
-    body { background: var(--bg); color: var(--text); padding: 40px 8%; max-width: 900px; margin: 0 auto; line-height: 1.7; }
-    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border-card); }
+    body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; line-height: 1.7; }
+    header { padding: 20px 8%; border-bottom: 1px solid var(--border-card); display: flex; align-items: center; justify-content: space-between; }
     .brand { font-size: 24px; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+    main { flex: 1; max-width: 900px; width: 100%; margin: 0 auto; padding: 40px 20px; }
     h1 { font-size: 36px; font-weight: 800; margin-bottom: 16px; background: linear-gradient(135deg, #a78bfa, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .last-updated { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
     .card { background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 20px; padding: 30px; margin-bottom: 24px; }
@@ -29,6 +30,8 @@
     ul { padding-left: 20px; }
     li { margin-bottom: 6px; }
     .highlight { background: rgba(139, 92, 246, 0.15); border-left: 4px solid var(--purple); padding: 14px 18px; border-radius: 8px; margin: 16px 0; color: #e9d5ff; }
+    footer { border-top: 1px solid var(--border-card); padding: 30px 8%; text-align: center; color: var(--text-muted); font-size: 14px; margin-top: auto; }
+    footer a { color: var(--text-muted); text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -38,55 +41,67 @@
       <iconify-icon icon="lucide:butterfly" style="color: #a78bfa;"></iconify-icon>
       Butterfly
     </a>
-    <a href="index.html" style="color: var(--text-muted); text-decoration: none;">← Back to Home</a>
+    <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600;">← Back to Home</a>
   </header>
 
-  <h1>Privacy Policy</h1>
-  <div class="last-updated">Last Updated: July 31, 2026 • Effective Immediately</div>
+  <main>
+    <h1>Privacy Policy</h1>
+    <div class="last-updated">Last Updated: July 31, 2026 • Effective Immediately</div>
 
-  <div class="card">
-    <h2><iconify-icon icon="heroicons:shield-check"></iconify-icon> Our Core Privacy Promise</h2>
-    <p>Your privacy is our highest priority. Butterfly was designed from the ground up to respect your personal boundaries. <strong>We do not read your messages, view your screen, track your location, or store personal user data.</strong></p>
-    <div class="highlight">
-      🔒 <strong>Blacklisted by Default:</strong> Sensitive apps such as WhatsApp, Signal, Banking apps, Password Managers, and Photos are blacklisted by default and are <strong>never</strong> collected, transmitted, or displayed on Discord.
+    <div class="card">
+      <h2><iconify-icon icon="heroicons:shield-check"></iconify-icon> Our Core Privacy Promise</h2>
+      <p>Your privacy is our highest priority. Butterfly was designed from the ground up to respect your personal boundaries. <strong>We do not read your messages, view your screen, track your location, or store personal user data.</strong></p>
+      <div class="highlight">
+        🔒 <strong>Blacklisted by Default:</strong> Sensitive apps such as WhatsApp, Signal, Banking apps, Password Managers, and Photos are blacklisted by default and are <strong>never</strong> collected, transmitted, or displayed on Discord.
+      </div>
     </div>
-  </div>
 
-  <div class="card">
-    <h2><iconify-icon icon="heroicons:document-magnifying-glass"></iconify-icon> Information We Collect & How It Is Used</h2>
-    <p>Butterfly collects only the minimal data required to render your active status on Discord:</p>
-    <ul>
-      <li><strong>App Foreground Metadata:</strong> The package name (e.g. <code>com.spotify.music</code>) and application title (e.g. <code>Spotify</code>) of the foreground app currently open on your phone.</li>
-      <li><strong>Session Timestamps:</strong> The start time of your current activity to display elapsed timers (e.g. <code>00:15 elapsed</code>).</li>
-      <li><strong>Device Pairing Tokens:</strong> Randomly generated anonymous UUID keys used exclusively to link your mobile device to your desktop companion app.</li>
-    </ul>
-  </div>
+    <div class="card">
+      <h2><iconify-icon icon="heroicons:document-magnifying-glass"></iconify-icon> Information We Collect & How It Is Used</h2>
+      <p>Butterfly collects only the minimal data required to render your active status on Discord:</p>
+      <ul>
+        <li><strong>App Foreground Metadata:</strong> The package name (e.g. <code>com.spotify.music</code>) and application title (e.g. <code>Spotify</code>) of the foreground app currently open on your phone.</li>
+        <li><strong>Session Timestamps:</strong> The start time of your current activity to display elapsed timers (e.g. <code>00:15 elapsed</code>).</li>
+        <li><strong>Device Pairing Tokens:</strong> Randomly generated anonymous UUID keys used exclusively to link your mobile device to your desktop companion app.</li>
+      </ul>
+    </div>
 
-  <div class="card">
-    <h2><iconify-icon icon="heroicons:eye-slash"></iconify-icon> Information We NEVER Collect</h2>
-    <ul>
-      <li>❌ Personal Identifiable Information (Names, Passwords, Emails, Phone Numbers)</li>
-      <li>❌ Screen contents, screenshots, or keystrokes</li>
-      <li>❌ Chat messages, notifications, or contact lists</li>
-      <li>❌ GPS / Location data</li>
-      <li>❌ Browser search histories or personal files</li>
-    </ul>
-  </div>
+    <div class="card">
+      <h2><iconify-icon icon="heroicons:eye-slash"></iconify-icon> Information We NEVER Collect</h2>
+      <ul>
+        <li>❌ Personal Identifiable Information (Names, Passwords, Emails, Phone Numbers)</li>
+        <li>❌ Screen contents, screenshots, or keystrokes</li>
+        <li>❌ Chat messages, notifications, or contact lists</li>
+        <li>❌ GPS / Location data</li>
+        <li>❌ Browser search histories or personal files</li>
+      </ul>
+    </div>
 
-  <div class="card">
-    <h2><iconify-icon icon="heroicons:user-group"></iconify-icon> User Consent & Control</h2>
-    <p>Before any app tracking occurs, you must grant explicit consent within the Butterfly mobile app. You maintain full granular control at all times:</p>
-    <ul>
-      <li>Enable or disable tracking for individual applications in the Privacy Control Center.</li>
-      <li>Pause tracking at any time using the global toggle switch.</li>
-      <li>Unpair devices instantly to wipe local session tokens.</li>
-    </ul>
-  </div>
+    <div class="card">
+      <h2><iconify-icon icon="heroicons:user-group"></iconify-icon> User Consent & Control</h2>
+      <p>Before any app tracking occurs, you must grant explicit consent within the Butterfly mobile app. You maintain full granular control at all times:</p>
+      <ul>
+        <li>Enable or disable tracking for individual applications in the Privacy Control Center.</li>
+        <li>Pause tracking at any time using the global toggle switch.</li>
+        <li>Unpair devices instantly to wipe local session tokens.</li>
+      </ul>
+    </div>
 
-  <div class="card">
-    <h2><iconify-icon icon="heroicons:circle-stack"></iconify-icon> Data Retention & Security</h2>
-    <p>Activity updates are transmitted securely via encrypted HTTPS and WebSocket (WSS) connections. Session activity logs are ephemeral and automatically cleared when sessions end.</p>
-  </div>
+    <div class="card">
+      <h2><iconify-icon icon="heroicons:circle-stack"></iconify-icon> Data Retention & Security</h2>
+      <p>Activity updates are transmitted securely via encrypted HTTPS and WebSocket (WSS) connections. Session activity logs are ephemeral and automatically cleared when sessions end.</p>
+    </div>
+  </main>
+
+  <footer>
+    <p>Butterfly 🦋 — Built with ❤️ for Discord users. Open Source under MIT License.</p>
+    <p style="margin-top: 8px;">
+      <a href="privacy.html">Privacy Policy</a> • 
+      <a href="terms.html">Terms of Service</a> • 
+      <a href="status.html">System Status</a> • 
+      <a href="https://github.com/venzixx/butterfly" target="_blank">GitHub Repository</a>
+    </p>
+  </footer>
 
 </body>
 </html>
