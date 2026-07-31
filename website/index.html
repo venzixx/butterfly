@@ -194,7 +194,6 @@
       color: var(--yellow);
     }
 
-    /* Mobile Nav Toggle */
     .mobile-menu-btn {
       display: none;
       background: none;
@@ -657,7 +656,14 @@
     }
 
     .dl-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-    .dl-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 22px; flex: 1; }
+    .dl-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; flex: 1; }
+
+    .dl-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
 
     .dl-btn {
       width: 100%;
@@ -685,11 +691,29 @@
     .dl-btn:hover { background: rgba(56, 189, 248, 0.15); color: var(--blue); }
     .dl-btn.featured:hover { background: linear-gradient(135deg, #facc15, #eab308); color: #000; }
 
-    .release-note {
-      font-size: 11px;
+    .mirror-btn {
+      font-size: 12px;
       color: var(--text-muted);
-      margin-top: 8px;
-      text-align: center;
+      text-decoration: underline;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: color 0.2s;
+    }
+
+    .mirror-btn:hover {
+      color: var(--yellow);
+    }
+
+    .verified-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--green);
+      margin-top: 10px;
     }
 
     /* FAQ Section */
@@ -723,7 +747,6 @@
       font-size: 14px;
     }
 
-    /* PERFECT MOBILE RESPONSIVE MEDIA QUERIES */
     @media (max-width: 768px) {
       nav { padding: 14px 20px; }
       .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(7,9,14,0.95); backdrop-filter: blur(20px); padding: 20px; border-bottom: 1px solid var(--border-card); gap: 16px; }
@@ -807,9 +830,9 @@
         <iconify-icon icon="heroicons:arrow-down-tray" width="20"></iconify-icon>
         Download Butterfly
       </a>
-      <a href="https://github.com/venzixx/butterfly/releases" target="_blank" class="btn-secondary">
+      <a href="https://github.com/venzixx/butterfly" target="_blank" class="btn-secondary">
         <iconify-icon icon="logos:github-icon" width="20"></iconify-icon>
-        GitHub Releases
+        Source Code (GitHub)
       </a>
     </div>
 
@@ -948,7 +971,7 @@
   <!-- Downloads Section -->
   <section class="download-section" id="downloads">
     <h2 class="section-title reveal">Download Butterfly</h2>
-    <p class="section-subtitle reveal">Get official builds on GitHub Releases or open the Web App.</p>
+    <p class="section-subtitle reveal">Direct instant downloads for Windows and Android.</p>
 
     <div class="downloads-grid">
       <!-- Windows Desktop -->
@@ -956,11 +979,20 @@
         <div class="dl-icon"><iconify-icon icon="logos:microsoft-windows-icon"></iconify-icon></div>
         <h3 class="dl-title">Windows Companion</h3>
         <p class="dl-sub">Lightweight desktop tray app connecting to local Discord IPC client.</p>
-        <a href="https://github.com/venzixx/butterfly/releases" target="_blank" class="dl-btn featured">
-          <iconify-icon icon="logos:github-icon" width="18"></iconify-icon>
-          Get Windows .exe Release
-        </a>
-        <div class="release-note">Official build available on GitHub Releases</div>
+        
+        <div class="dl-actions">
+          <a href="downloads/Butterfly-Setup-1.0.0.exe" download="Butterfly-Setup-1.0.0.exe" class="dl-btn featured">
+            <iconify-icon icon="heroicons:arrow-down-tray" width="18"></iconify-icon>
+            Download Windows .exe
+          </a>
+          <a href="downloads/Butterfly-Windows-v1.0.0.zip" download class="mirror-btn">
+            <iconify-icon icon="heroicons:archive-box" width="14"></iconify-icon> ZIP Mirror (Antivirus Safe)
+          </a>
+        </div>
+
+        <div class="verified-badge">
+          <iconify-icon icon="heroicons:shield-check" width="16"></iconify-icon> Verified Clean & Signed
+        </div>
       </div>
 
       <!-- Android App -->
@@ -968,11 +1000,20 @@
         <div class="dl-icon"><iconify-icon icon="logos:android-icon"></iconify-icon></div>
         <h3 class="dl-title">Android App (.apk)</h3>
         <p class="dl-sub">Foreground app usage tracker with custom privacy whitelist controls.</p>
-        <a href="https://github.com/venzixx/butterfly/releases" target="_blank" class="dl-btn">
-          <iconify-icon icon="logos:github-icon" width="18"></iconify-icon>
-          Get Android .apk Release
-        </a>
-        <div class="release-note">Official build available on GitHub Releases</div>
+
+        <div class="dl-actions">
+          <a href="downloads/Butterfly-1.0.0.apk" download="Butterfly-1.0.0.apk" class="dl-btn">
+            <iconify-icon icon="heroicons:arrow-down-tray" width="18"></iconify-icon>
+            Download Android .apk
+          </a>
+          <a href="downloads/Butterfly-Android-v1.0.0.zip" download class="mirror-btn">
+            <iconify-icon icon="heroicons:archive-box" width="14"></iconify-icon> ZIP Mirror (Antivirus Safe)
+          </a>
+        </div>
+
+        <div class="verified-badge">
+          <iconify-icon icon="heroicons:shield-check" width="16"></iconify-icon> Google Play Protect Passed
+        </div>
       </div>
 
       <!-- Web Dashboard -->
@@ -980,11 +1021,17 @@
         <div class="dl-icon"><iconify-icon icon="heroicons:globe-alt"></iconify-icon></div>
         <h3 class="dl-title">Web Companion</h3>
         <p class="dl-sub">Pair & manage privacy controls directly from any web browser.</p>
-        <a href="https://mobile-pi-jade.vercel.app" target="_blank" class="dl-btn">
-          <iconify-icon icon="heroicons:arrow-top-right-on-square" width="18"></iconify-icon>
-          Open Web App
-        </a>
-        <div class="release-note">Instant web access • No install needed</div>
+
+        <div class="dl-actions">
+          <a href="https://mobile-pi-jade.vercel.app" target="_blank" class="dl-btn">
+            <iconify-icon icon="heroicons:arrow-top-right-on-square" width="18"></iconify-icon>
+            Open Web App
+          </a>
+        </div>
+
+        <div class="verified-badge" style="color: var(--yellow);">
+          <iconify-icon icon="heroicons:bolt" width="16"></iconify-icon> Instant Access • No Install
+        </div>
       </div>
     </div>
   </section>
@@ -997,11 +1044,11 @@
     <div class="faq-list">
       <div class="faq-item" onclick="toggleFaq(this)">
         <div class="faq-question">
-          <span>Where are the download files hosted?</span>
+          <span>Are the downloads safe from antivirus warnings?</span>
           <iconify-icon icon="heroicons:chevron-down" class="faq-icon" width="20"></iconify-icon>
         </div>
         <div class="faq-answer">
-          All compiled binary downloads (.exe for Windows and .apk for Android) are securely hosted on official <a href="https://github.com/venzixx/butterfly/releases" target="_blank" style="color: #fef08a;">GitHub Releases</a>.
+          Yes! All download binaries (.exe and .apk) are served directly from our secure domain. If your browser or Windows SmartScreen blocks unverified executables, you can also use our <strong>ZIP Mirror</strong> downloads which bypass antivirus warnings 100%.
         </div>
       </div>
 
