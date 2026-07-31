@@ -342,7 +342,7 @@
       margin-top: 4px;
     }
 
-    /* Live Interactive Sandbox */
+    /* Sandbox Interactive Demo */
     .sandbox-section {
       padding: 20px 6% 60px 6%;
       max-width: 1050px;
@@ -502,8 +502,8 @@
     .discord-subtitle { font-size: 13px; color: #cbd5e1; }
     .discord-timer { font-size: 12px; color: var(--yellow); font-weight: 700; display: flex; align-items: center; gap: 6px; }
 
-    /* App Showcase & Search */
-    .app-showcase-section {
+    /* Downloads Grid */
+    .download-section {
       padding: 60px 6%;
       max-width: 1100px;
       margin: 0 auto;
@@ -522,106 +522,6 @@
       color: var(--text-muted);
       font-size: 16px;
       margin-bottom: 30px;
-    }
-
-    .search-box-wrapper {
-      max-width: 480px;
-      margin: 0 auto 30px auto;
-      position: relative;
-    }
-
-    .search-input {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid var(--border-card);
-      border-radius: 16px;
-      padding: 12px 18px 12px 44px;
-      color: var(--text);
-      font-size: 15px;
-      outline: none;
-    }
-
-    .search-icon-pos {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 18px;
-    }
-
-    .app-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-
-    .app-showcase-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: 18px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .app-showcase-icon { font-size: 28px; display: flex; }
-    .app-showcase-name { font-size: 15px; font-weight: 700; }
-    .app-showcase-status {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin-top: 2px;
-      display: inline-block;
-    }
-
-    .status-allowed { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
-    .status-blacklisted { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
-
-    /* Workflow Stepper */
-    .workflow-section {
-      padding: 60px 6%;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .workflow-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-    }
-
-    .step-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: 20px;
-      padding: 26px 20px;
-      position: relative;
-    }
-
-    .step-number {
-      position: absolute;
-      top: -14px;
-      left: 20px;
-      background: linear-gradient(135deg, #facc15, #38bdf8);
-      color: #000;
-      font-weight: 900;
-      font-size: 12px;
-      padding: 4px 12px;
-      border-radius: 16px;
-    }
-
-    .step-icon { font-size: 32px; color: var(--yellow); margin-top: 8px; margin-bottom: 14px; display: flex; }
-    .step-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-    .step-desc { font-size: 13px; color: var(--text-muted); }
-
-    /* Downloads Grid */
-    .download-section {
-      padding: 60px 6%;
-      max-width: 1100px;
-      margin: 0 auto;
     }
 
     .downloads-grid {
@@ -702,9 +602,7 @@
       transition: color 0.2s;
     }
 
-    .mirror-btn:hover {
-      color: var(--yellow);
-    }
+    .mirror-btn:hover { color: var(--yellow); }
 
     .verified-badge {
       display: flex;
@@ -766,9 +664,7 @@
       .sandbox-card { grid-template-columns: 1fr; padding: 20px; }
       .sim-app-grid { grid-template-columns: repeat(2, 1fr); }
 
-      .app-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .downloads-grid { grid-template-columns: 1fr; gap: 16px; }
-      .workflow-grid { grid-template-columns: 1fr; gap: 16px; }
       .section-title { font-size: 28px; }
     }
   </style>
@@ -789,12 +685,6 @@
     </button>
 
     <div class="nav-links" id="navLinksMenu">
-      <a href="#how-it-works" class="nav-link" onclick="closeMobileNav()">
-        <iconify-icon icon="heroicons:sparkles" width="16"></iconify-icon> How It Works
-      </a>
-      <a href="#apps" class="nav-link" onclick="closeMobileNav()">
-        <iconify-icon icon="heroicons:squares-2x2" width="16"></iconify-icon> Apps
-      </a>
       <a href="#downloads" class="nav-link" onclick="closeMobileNav()">
         <iconify-icon icon="heroicons:arrow-down-tray" width="16"></iconify-icon> Downloads
       </a>
@@ -921,49 +811,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Universal App Showcase & Live Search -->
-  <section class="app-showcase-section reveal" id="apps">
-    <h2 class="section-title">Universal Android App Compatibility</h2>
-    <p class="section-subtitle">Butterfly dynamically captures ANY open app on your phone. Private apps are blacklisted by default.</p>
-
-    <div class="search-box-wrapper">
-      <span class="search-icon-pos"><iconify-icon icon="heroicons:magnifying-glass"></iconify-icon></span>
-      <input type="text" id="appSearchInput" class="search-input" placeholder="Search any app (e.g. PUBG, Genshin, Soundcloud, Instagram)..." oninput="filterShowcaseApps()">
-    </div>
-
-    <div class="app-grid" id="appGridShowcase">
-    </div>
-  </section>
-
-  <!-- How It Works Workflow -->
-  <section class="workflow-section" id="how-it-works">
-    <h2 class="section-title reveal">How Butterfly Works</h2>
-    <p class="section-subtitle reveal">3 simple steps to stream your mobile apps directly to Discord.</p>
-
-    <div class="workflow-grid">
-      <div class="step-card reveal delay-1">
-        <div class="step-number">STEP 1</div>
-        <div class="step-icon"><iconify-icon icon="heroicons:qr-code"></iconify-icon></div>
-        <div class="step-title">Instant Pairing</div>
-        <div class="step-desc">Open the Butterfly desktop companion, scan the QR code with your phone, and pair securely in seconds without any login.</div>
-      </div>
-
-      <div class="step-card reveal delay-2">
-        <div class="step-number">STEP 2</div>
-        <div class="step-icon"><iconify-icon icon="heroicons:shield-check"></iconify-icon></div>
-        <div class="step-title">Set Privacy Rules</div>
-        <div class="step-desc">Choose which apps to share on Discord. Sensitive apps like WhatsApp, Banking, and Messages are blacklisted by default.</div>
-      </div>
-
-      <div class="step-card reveal delay-3">
-        <div class="step-number">STEP 3</div>
-        <div class="step-icon"><iconify-icon icon="logos:discord-icon"></iconify-icon></div>
-        <div class="step-title">Live Discord Status</div>
-        <div class="step-desc">Whenever you open YouTube, Spotify, or Netflix on your phone, your Discord status updates instantly in real time!</div>
       </div>
     </div>
   </section>
@@ -1104,44 +951,6 @@
 
     document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
 
-    const allApps = [
-      { name: 'Spotify', icon: 'logos:spotify-icon', status: 'Tracked', allowed: true },
-      { name: 'YouTube', icon: 'logos:youtube-icon', status: 'Tracked', allowed: true },
-      { name: 'Netflix', icon: 'logos:netflix-icon', status: 'Tracked', allowed: true },
-      { name: 'Twitch', icon: 'logos:twitch', status: 'Tracked', allowed: true },
-      { name: 'Reddit', icon: 'logos:reddit-icon', status: 'Tracked', allowed: true },
-      { name: 'Duolingo', icon: 'logos:duolingo-icon', status: 'Tracked', allowed: true },
-      { name: 'Instagram', icon: 'logos:instagram-icon', status: 'Tracked', allowed: true },
-      { name: 'SoundCloud', icon: 'logos:soundcloud-icon', status: 'Tracked', allowed: true },
-      { name: 'TikTok', icon: 'logos:tiktok-icon', status: 'Tracked', allowed: true },
-      { name: 'PUBG Mobile', icon: 'simple-icons:pubg', status: 'Tracked', allowed: true },
-      { name: 'Genshin Impact', icon: 'simple-icons:mihoyo', status: 'Tracked', allowed: true },
-      { name: 'Roblox', icon: 'simple-icons:roblox', status: 'Tracked', allowed: true },
-      { name: 'Minecraft', icon: 'simple-icons:minecraft', status: 'Tracked', allowed: true },
-      { name: 'Chrome', icon: 'logos:google-chrome', status: 'Tracked', allowed: true },
-      { name: 'VS Code', icon: 'logos:visual-studio-code', status: 'Tracked', allowed: true },
-      { name: 'WhatsApp', icon: 'logos:whatsapp-icon', status: '🔒 Blacklisted', allowed: false },
-    ];
-
-    function renderShowcaseGrid(items) {
-      const grid = document.getElementById('appGridShowcase');
-      grid.innerHTML = items.map(app => `
-        <div class="app-showcase-card">
-          <div class="app-showcase-icon"><iconify-icon icon="${app.icon}"></iconify-icon></div>
-          <div>
-            <div class="app-showcase-name">${app.name}</div>
-            <span class="app-showcase-status ${app.allowed ? 'status-allowed' : 'status-blacklisted'}">${app.status}</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function filterShowcaseApps() {
-      const q = document.getElementById('appSearchInput').value.toLowerCase().trim();
-      const filtered = allApps.filter(a => a.name.toLowerCase().includes(q));
-      renderShowcaseGrid(filtered.length ? filtered : allApps);
-    }
-
     let timerSec = 18;
     setInterval(() => {
       timerSec++;
@@ -1162,10 +971,6 @@
     function toggleFaq(item) {
       item.classList.toggle('active');
     }
-
-    window.onload = () => {
-      renderShowcaseGrid(allApps);
-    };
   </script>
 </body>
 </html>
