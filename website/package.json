@@ -1,0 +1,9 @@
+{
+  "name": "butterfly-landing",
+  "version": "1.0.0",
+  "description": "Butterfly 🦋 — Discord Mobile Rich Presence Official Website & Downloads",
+  "type": "module",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

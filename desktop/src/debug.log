@@ -49,3 +49,9 @@
 [2026-07-30T17:28:29.443Z] Updating Discord Presence: Instagram (com.instagram.android)
 [2026-07-30T17:28:29.521Z] SUCCESS: Presence set to "Instagram" with logo https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/instagram.png
 [2026-07-30T17:28:29.543Z] SUCCESS: Presence set to "Instagram" with logo https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/instagram.png
+[2026-07-30T17:58:08.262Z] Creating BrowserWindow...
+[2026-07-30T17:58:08.361Z] Initializing Discord RPC...
+[2026-07-30T17:58:08.411Z] [Discord RPC] Connected successfully to Discord Client!
+[2026-07-30T17:58:08.412Z] Updating Discord Presence: Butterfly Mobile (com.butterfly.app)
+[2026-07-30T17:58:08.423Z] SUCCESS: Presence set to "Butterfly Mobile" with logo https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/android.png
+[2026-07-30T17:58:08.968Z] Window loaded

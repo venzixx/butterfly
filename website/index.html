@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Butterfly 🦋 — Discord Mobile Rich Presence</title>
+  <meta name="description" content="Stream what you are doing on your Android phone live to your Discord profile status. Free, open source, and privacy-first.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Iconify SVG framework -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    :root {
+      --bg: #090713;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --purple: #8b5cf6;
+      --violet: #6d28d9;
+      --cyan: #06b6d4;
+      --pink: #ec4899;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --green: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Ambient Background Glows */
+    .glow-top {
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, rgba(6, 182, 212, 0.15) 50%, rgba(9, 7, 19, 0) 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Navbar */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 7, 19, 0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-card);
+      padding: 16px 8%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 22px;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-logo {
+      font-size: 30px;
+      background: linear-gradient(135deg, #a78bfa, #06b6d4, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .btn-github {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-card);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-github:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 100px 8% 60px 8%;
+      text-align: center;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(139, 92, 246, 0.12);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: #c4b5fd;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 58px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #a78bfa, #06b6d4, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple), var(--violet));
+      color: white;
+      padding: 16px 32px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+      transition: all 0.25s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-card);
+      color: var(--text);
+      padding: 16px 28px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+
+    /* Live Interactive Sandbox */
+    .sandbox-section {
+      padding: 40px 8% 80px 8%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .sandbox-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 28px;
+      padding: 36px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .sandbox-info h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .sandbox-info p {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    .sim-app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .sim-btn {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-card);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .sim-btn:hover, .sim-btn.active {
+      background: rgba(139, 92, 246, 0.25);
+      border-color: var(--purple);
+    }
+
+    /* Discord Profile Card Mockup */
+    .discord-card-preview {
+      background: #18191c;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #2f3136;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discord-card-preview::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, #8b5cf6, #06b6d4, #ec4899);
+    }
+
+    .discord-header {
+      font-size: 11px;
+      font-weight: 800;
+      color: #b9bbbe;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .discord-body {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .discord-logo-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: #2f3136;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .discord-logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .phone-badge-small {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: #5865f2;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #18191c;
+    }
+
+    .discord-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .discord-app-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .discord-subtitle {
+      font-size: 14px;
+      color: #dcddde;
+    }
+
+    .discord-timer {
+      font-size: 13px;
+      color: #10b981;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Downloads Grid (Antigravity Style) */
+    .download-section {
+      padding: 80px 8%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 38px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 17px;
+      margin-bottom: 50px;
+    }
+
+    .downloads-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .dl-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      backdrop-filter: blur(16px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .dl-card:hover {
+      border-color: rgba(139, 92, 246, 0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .dl-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: rgba(139, 92, 246, 0.15);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #c4b5fd;
+    }
+
+    .dl-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .dl-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      flex: 1;
+    }
+
+    .dl-btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-card);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .dl-btn.featured {
+      background: linear-gradient(135deg, var(--purple), var(--violet));
+      border: none;
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    }
+
+    .dl-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.02);
+    }
+
+    .dl-btn.featured:hover {
+      background: linear-gradient(135deg, #a78bfa, var(--purple));
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .feat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .feat-icon {
+      font-size: 28px;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+
+    .feat-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .feat-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-card);
+      padding: 40px 8%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 850px) {
+      .hero-title { font-size: 38px; }
+      .sandbox-card { grid-template-columns: 1fr; }
+      .downloads-grid, .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Glow -->
+  <div class="glow-top"></div>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="#" class="brand">
+      <span class="brand-logo"><iconify-icon icon="lucide:butterfly"></iconify-icon></span>
+      Butterfly
+    </a>
+    <div class="nav-links">
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#downloads" class="nav-link">Downloads</a>
+      <a href="https://mobile-pi-jade.vercel.app" target="_blank" class="nav-link">Web App</a>
+      <a href="https://github.com/venzixx/butterfly" target="_blank" class="btn-github">
+        <iconify-icon icon="logos:github-icon" width="18"></iconify-icon> GitHub
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="badge-pill">
+      <iconify-icon icon="heroicons:sparkles" width="16"></iconify-icon>
+      100% Free & Open Source on GitHub
+    </div>
+
+    <h1 class="hero-title">
+      Discord Rich Presence<br>for Your <span>Phone.</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Butterfly seamlessly streams what you're doing on your Android phone directly to your live Discord profile status in real time.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#downloads" class="btn-primary">
+        <iconify-icon icon="heroicons:arrow-down-tray" width="20"></iconify-icon>
+        Download Butterfly
+      </a>
+      <a href="https://github.com/venzixx/butterfly" target="_blank" class="btn-secondary">
+        <iconify-icon icon="logos:github-icon" width="20"></iconify-icon>
+        View on GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- Live Sandbox Demo -->
+  <section class="sandbox-section">
+    <div class="sandbox-card">
+      <div class="sandbox-info">
+        <h3>⚡ Interactive Live Demo</h3>
+        <p>Click any phone app below to test how Butterfly updates your Discord profile status in real time!</p>
+
+        <div class="sim-app-grid">
+          <button class="sim-btn active" onclick="updateDemo('Spotify', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/spotify.png', this)">
+            <iconify-icon icon="logos:spotify-icon" width="18"></iconify-icon> Spotify
+          </button>
+          <button class="sim-btn" onclick="updateDemo('YouTube', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/youtube.png', this)">
+            <iconify-icon icon="logos:youtube-icon" width="18"></iconify-icon> YouTube
+          </button>
+          <button class="sim-btn" onclick="updateDemo('Netflix', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/netflix.png', this)">
+            <iconify-icon icon="logos:netflix-icon" width="18"></iconify-icon> Netflix
+          </button>
+          <button class="sim-btn" onclick="updateDemo('Twitch', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/twitch.png', this)">
+            <iconify-icon icon="logos:twitch" width="18"></iconify-icon> Twitch
+          </button>
+          <button class="sim-btn" onclick="updateDemo('Reddit', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/reddit.png', this)">
+            <iconify-icon icon="logos:reddit-icon" width="18"></iconify-icon> Reddit
+          </button>
+          <button class="sim-btn" onclick="updateDemo('Duolingo', 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/duolingo.png', this)">
+            <iconify-icon icon="logos:duolingo-icon" width="18"></iconify-icon> Duolingo
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Discord Card Mockup -->
+      <div class="discord-card-preview">
+        <div class="discord-header">PLAYING A GAME</div>
+        <div class="discord-body">
+          <div class="discord-logo-box">
+            <img id="demoLogo" src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/spotify.png" alt="Spotify">
+            <div class="phone-badge-small">
+              <iconify-icon icon="heroicons:device-phone-mobile" width="10" style="color: white;"></iconify-icon>
+            </div>
+          </div>
+          <div class="discord-details">
+            <div class="discord-app-title" id="demoTitle">Spotify</div>
+            <div class="discord-subtitle">On Android Phone</div>
+            <div class="discord-timer">
+              <iconify-icon icon="heroicons:play" width="12"></iconify-icon>
+              <span id="demoTimer">00:14 elapsed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Downloads Section -->
+  <section class="download-section" id="downloads">
+    <h2 class="section-title">Download Butterfly</h2>
+    <p class="section-subtitle">Get the official apps for Desktop, Android, and Web.</p>
+
+    <div class="downloads-grid">
+      <!-- Windows Desktop -->
+      <div class="dl-card">
+        <div class="dl-icon">
+          <iconify-icon icon="logos:microsoft-windows-icon"></iconify-icon>
+        </div>
+        <h3 class="dl-title">Windows Companion</h3>
+        <p class="dl-sub">Lightweight tray app that connects to your local Discord IPC client.</p>
+        <a href="https://github.com/venzixx/butterfly/releases/download/v1.0.0/Butterfly-Setup-1.0.0.exe" class="dl-btn featured">
+          <iconify-icon icon="heroicons:arrow-down-tray" width="16"></iconify-icon>
+          Download .exe (v1.0.0)
+        </a>
+      </div>
+
+      <!-- Android App -->
+      <div class="dl-card">
+        <div class="dl-icon">
+          <iconify-icon icon="logos:android-icon"></iconify-icon>
+        </div>
+        <h3 class="dl-title">Android App (.apk)</h3>
+        <p class="dl-sub">Tracks foreground app usage with custom privacy whitelist rules.</p>
+        <a href="https://github.com/venzixx/butterfly/releases/download/v1.0.0/Butterfly.apk" class="dl-btn">
+          <iconify-icon icon="heroicons:arrow-down-tray" width="16"></iconify-icon>
+          Download APK (v1.0.0)
+        </a>
+      </div>
+
+      <!-- Web Dashboard -->
+      <div class="dl-card">
+        <div class="dl-icon">
+          <iconify-icon icon="heroicons:globe-alt"></iconify-icon>
+        </div>
+        <h3 class="dl-title">Web Companion</h3>
+        <p class="dl-sub">Pair & manage privacy controls directly from any web browser.</p>
+        <a href="https://mobile-pi-jade.vercel.app" target="_blank" class="dl-btn">
+          <iconify-icon icon="heroicons:arrow-top-right-on-square" width="16"></iconify-icon>
+          Open Web App
+        </a>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="features-grid" id="features">
+      <div class="feat-card">
+        <div class="feat-icon"><iconify-icon icon="heroicons:shield-check"></iconify-icon></div>
+        <div class="feat-title">Privacy First</div>
+        <div class="feat-desc">You choose which apps to share. Sensitive apps like WhatsApp stay 100% hidden with 🔒 shield protection.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><iconify-icon icon="heroicons:qr-code"></iconify-icon></div>
+        <div class="feat-title">Instant QR Pairing</div>
+        <div class="feat-desc">No login or passwords required. Scan the QR code or enter 6 digits to pair your devices instantly.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon"><iconify-icon icon="heroicons:bolt"></iconify-icon></div>
+        <div class="feat-title">Ultra-Fast Cloud Sync</div>
+        <div class="feat-desc">Powered by global cloud server infrastructure with sub-50ms activity streaming latency.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Butterfly 🦋 — Built with ❤️ for Discord users. Open Source under MIT License.</p>
+    <p style="margin-top: 8px;">
+      <a href="https://github.com/venzixx/butterfly" target="_blank" style="color: var(--text-muted); text-decoration: underline;">GitHub Repository</a> • 
+      <a href="https://butterfly-2dyb.onrender.com" target="_blank" style="color: var(--text-muted); text-decoration: underline;">Cloud Relay Server</a>
+    </p>
+  </footer>
+
+  <script>
+    let timerSec = 14;
+    setInterval(() => {
+      timerSec++;
+      const mins = Math.floor(timerSec / 60).toString().padStart(2, '0');
+      const secs = (timerSec % 60).toString().padStart(2, '0');
+      document.getElementById('demoTimer').innerText = `${mins}:${secs} elapsed`;
+    }, 1000);
+
+    function updateDemo(appName, logoUrl, btn) {
+      document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.getElementById('demoTitle').innerText = appName;
+      document.getElementById('demoLogo').src = logoUrl;
+      timerSec = 0;
+    }
+  </script>
+</body>
+</html>
