@@ -7,8 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Iconify Framework -->
+  <!-- Iconify & HTML5 QR Code Scanner -->
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
   <style>
     :root {
       --bg: #07090e;
@@ -43,7 +45,6 @@
       padding: 0;
     }
 
-    /* Smartphone Viewport */
     .app-viewport {
       width: 100%;
       max-width: 420px;
@@ -69,7 +70,6 @@
       }
     }
 
-    /* Liquid Ambient Glowing Background Orbs */
     .liquid-orb-1 {
       position: absolute;
       top: -80px;
@@ -99,7 +99,6 @@
       100% { transform: translate(30px, 30px) scale(1.15); }
     }
 
-    /* Header Bar */
     .header {
       padding: 36px 22px 16px 22px;
       display: flex;
@@ -147,7 +146,6 @@
       border-color: rgba(239, 68, 68, 0.3);
     }
 
-    /* Tab Content Screen Containers */
     .tab-content {
       flex: 1;
       overflow-y: auto;
@@ -168,7 +166,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Glass Cards */
     .glass-card {
       background: var(--card-glass);
       border: 1px solid var(--card-border);
@@ -201,7 +198,6 @@
       gap: 8px;
     }
 
-    /* Inputs & Buttons */
     .pair-input-group {
       display: flex;
       gap: 10px;
@@ -237,7 +233,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       box-shadow: 0 6px 18px rgba(234, 179, 8, 0.35);
       transition: all 0.2s;
     }
@@ -245,6 +241,80 @@
     .btn-liquid:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 24px rgba(234, 179, 8, 0.5);
+    }
+
+    .btn-scan-qr {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--blue);
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .btn-scan-qr:hover {
+      background: rgba(56, 189, 248, 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Live Camera QR Scanner Modal Overlay */
+    .qr-scanner-modal {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(7, 9, 14, 0.98);
+      backdrop-filter: blur(20px);
+      z-index: 400;
+      display: none;
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .qr-scanner-modal.active {
+      display: flex;
+    }
+
+    .qr-scanner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .qr-scanner-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close-scan {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    #qrVideoReader {
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid var(--yellow);
+      box-shadow: 0 0 30px rgba(250, 204, 21, 0.3);
     }
 
     /* Live Foreground Player Display */
@@ -272,18 +342,9 @@
       font-size: 38px;
     }
 
-    .player-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: #ffffff;
-    }
+    .player-title { font-size: 20px; font-weight: 800; color: #ffffff; }
+    .player-sub { font-size: 13px; color: var(--muted); }
 
-    .player-sub {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    /* App Rules List */
     .app-list { display: flex; flex-direction: column; gap: 10px; }
 
     .app-item {
@@ -308,7 +369,6 @@
     .app-name { font-size: 15px; font-weight: 700; }
     .app-pkg { font-size: 11px; color: var(--muted); }
 
-    /* Custom iOS Toggle Switch */
     .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
@@ -322,7 +382,6 @@
     input:checked + .slider { background-color: var(--yellow); }
     input:checked + .slider:before { transform: translateX(20px); }
 
-    /* In-App Status Monitor Dashboard */
     .status-row {
       display: flex;
       justify-content: space-between;
@@ -333,24 +392,9 @@
       border-radius: 16px;
     }
 
-    .status-row-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      font-weight: 600;
-    }
+    .status-row-label { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+    .status-row-val { font-size: 13px; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 6px; }
 
-    .status-row-val {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--green);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Floating iPhone Bottom Dock / Navigation Bar */
     .floating-dock {
       position: absolute;
       bottom: 20px;
@@ -391,7 +435,6 @@
       transform: translateY(-2px);
     }
 
-    /* Privacy Consent Modal Overlay */
     .modal-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -451,6 +494,23 @@
     <div class="liquid-orb-1"></div>
     <div class="liquid-orb-2"></div>
 
+    <!-- Live Camera QR Scanner Modal -->
+    <div class="qr-scanner-modal" id="qrScannerModal">
+      <div class="qr-scanner-header">
+        <div class="qr-scanner-title">
+          <iconify-icon icon="heroicons:camera" width="22"></iconify-icon>
+          Point Camera at PC Screen QR Code
+        </div>
+        <button class="btn-close-scan" onclick="stopQrCamera()">
+          <iconify-icon icon="heroicons:x-mark" width="20"></iconify-icon>
+        </button>
+      </div>
+      <div id="qrVideoReader"></div>
+      <p style="text-align: center; font-size: 12px; color: var(--muted); margin-top: 16px;">
+        Scan the QR code displayed on your Butterfly Desktop app.
+      </p>
+    </div>
+
     <!-- Onboarding Privacy Consent Modal -->
     <div class="modal-overlay" id="privacyModal">
       <div class="modal-header">
@@ -495,10 +555,16 @@
       <div class="glass-card">
         <div class="card-title">
           <iconify-icon icon="heroicons:qr-code" width="18"></iconify-icon>
-          Instant QR / Code Pairing
+          Instant Camera QR Pairing
         </div>
-        <p style="font-size: 13px; color: var(--muted);">Enter the 6-digit pairing code shown on your Desktop companion app to connect instantly.</p>
-        
+
+        <button class="btn-scan-qr" onclick="startQrCamera()">
+          <iconify-icon icon="heroicons:camera" width="22"></iconify-icon>
+          Scan QR Code with Camera
+        </button>
+
+        <div style="text-align: center; font-size: 12px; color: var(--muted); margin: 6px 0;">— OR ENTER 6-DIGIT CODE MANUALLY —</div>
+
         <div class="pair-input-group">
           <input type="text" id="codeInput" placeholder="BFLY-1234" value="BFLY-">
           <button class="btn-liquid" onclick="pairWithCode()">Pair Now</button>
@@ -520,7 +586,7 @@
           </div>
           <div>
             <div class="player-title" id="currentAppName">Lock Screen</div>
-            <div class="player-sub" id="currentAppSub">Tap any app in the Privacy tab to test status</div>
+            <div class="player-sub" id="currentAppSub">Tap any app in Privacy tab to test live status</div>
           </div>
         </div>
       </div>
@@ -619,6 +685,7 @@
     const SERVER_URL = 'https://butterfly-2dyb.onrender.com';
     let deviceToken = null;
     let pairingId = null;
+    let html5QrScanner = null;
 
     const apps = [
       { name: 'Spotify', pkg: 'com.spotify.music', icon: 'logos:spotify-icon', allowed: true },
@@ -664,6 +731,54 @@
 
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.getElementById(`tab-${tabId}`).classList.add('active');
+    }
+
+    // Camera QR Scanner Integration
+    function startQrCamera() {
+      document.getElementById('qrScannerModal').classList.add('active');
+
+      if (!html5QrScanner) {
+        html5QrScanner = new Html5Qrcode("qrVideoReader");
+      }
+
+      html5QrScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 220 },
+        (decodedText) => {
+          console.log('[QR Code Scanned]', decodedText);
+          stopQrCamera();
+
+          try {
+            // Check if JSON payload or code string
+            let codeToUse = decodedText;
+            if (decodedText.startsWith('{')) {
+              const parsed = JSON.parse(decodedText);
+              codeToUse = parsed.code || decodedText;
+            }
+            document.getElementById('codeInput').value = codeToUse;
+            pairWithCode();
+          } catch (e) {
+            document.getElementById('codeInput').value = decodedText;
+            pairWithCode();
+          }
+        },
+        (errorMessage) => {}
+      ).catch(err => {
+        alert('Camera access denied or unequipped: ' + err);
+        stopQrCamera();
+      });
+    }
+
+    function stopQrCamera() {
+      if (html5QrScanner) {
+        html5QrScanner.stop().then(() => {
+          document.getElementById('qrScannerModal').classList.remove('active');
+        }).catch(err => {
+          document.getElementById('qrScannerModal').classList.remove('active');
+        });
+      } else {
+        document.getElementById('qrScannerModal').classList.remove('active');
+      }
     }
 
     function renderApps(items) {
