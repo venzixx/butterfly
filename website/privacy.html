@@ -10,26 +10,27 @@
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
   <style>
     :root {
-      --bg: #090713;
+      --bg: #07090e;
       --bg-card: rgba(255, 255, 255, 0.03);
       --border-card: rgba(255, 255, 255, 0.08);
-      --purple: #8b5cf6;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
+      --yellow: #facc15;
+      --blue: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
     body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; line-height: 1.7; }
-    header { padding: 20px 8%; border-bottom: 1px solid var(--border-card); display: flex; align-items: center; justify-content: space-between; }
+    header { padding: 20px 8%; border-bottom: 1px solid var(--border-card); display: flex; align-items: center; justify-content: space-between; background: rgba(7,9,14,0.8); backdrop-filter: blur(16px); }
     .brand { font-size: 24px; font-weight: 800; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; }
     main { flex: 1; max-width: 900px; width: 100%; margin: 0 auto; padding: 40px 20px; }
-    h1 { font-size: 36px; font-weight: 800; margin-bottom: 16px; background: linear-gradient(135deg, #a78bfa, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    h1 { font-size: 36px; font-weight: 800; margin-bottom: 16px; background: linear-gradient(135deg, #facc15, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .last-updated { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
     .card { background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 20px; padding: 30px; margin-bottom: 24px; }
-    h2 { font-size: 20px; font-weight: 700; color: #c4b5fd; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    h2 { font-size: 20px; font-weight: 700; color: #fef08a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     p, ul { color: #d1d5db; font-size: 15px; margin-bottom: 14px; }
     ul { padding-left: 20px; }
     li { margin-bottom: 6px; }
-    .highlight { background: rgba(139, 92, 246, 0.15); border-left: 4px solid var(--purple); padding: 14px 18px; border-radius: 8px; margin: 16px 0; color: #e9d5ff; }
+    .highlight { background: rgba(250, 204, 21, 0.12); border-left: 4px solid var(--yellow); padding: 14px 18px; border-radius: 8px; margin: 16px 0; color: #fef08a; }
     footer { border-top: 1px solid var(--border-card); padding: 30px 8%; text-align: center; color: var(--text-muted); font-size: 14px; margin-top: auto; }
     footer a { color: var(--text-muted); text-decoration: underline; }
   </style>
@@ -38,7 +39,7 @@
 
   <header>
     <a href="index.html" class="brand">
-      <iconify-icon icon="lucide:butterfly" style="color: #a78bfa;"></iconify-icon>
+      <iconify-icon icon="lucide:butterfly" style="color: var(--yellow);"></iconify-icon>
       Butterfly
     </a>
     <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600;">← Back to Home</a>

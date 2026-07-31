@@ -52,15 +52,15 @@
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
   <style>
     :root {
-      --bg: #090713;
+      --bg: #07090e;
       --bg-card: rgba(255, 255, 255, 0.03);
       --border-card: rgba(255, 255, 255, 0.08);
-      --purple: #8b5cf6;
-      --violet: #6d28d9;
-      --cyan: #06b6d4;
-      --pink: #ec4899;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
+      --yellow: #facc15;
+      --yellow-glow: #eab308;
+      --blue: #38bdf8;
+      --blue-dark: #0284c7;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
       --green: #10b981;
     }
 
@@ -84,10 +84,10 @@
       top: -200px;
       left: 50%;
       transform: translateX(-50%);
-      width: 1000px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, rgba(6, 182, 212, 0.15) 50%, rgba(9, 7, 19, 0) 70%);
-      filter: blur(80px);
+      width: 1100px;
+      height: 650px;
+      background: radial-gradient(circle, rgba(250, 204, 21, 0.15) 0%, rgba(56, 189, 248, 0.15) 45%, rgba(7, 9, 14, 0) 70%);
+      filter: blur(90px);
       z-index: 0;
       pointer-events: none;
     }
@@ -97,7 +97,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(9, 7, 19, 0.7);
+      background: rgba(7, 9, 14, 0.75);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-card);
       padding: 16px 8%;
@@ -118,10 +118,11 @@
 
     .brand-logo {
       font-size: 30px;
-      background: linear-gradient(135deg, #a78bfa, #06b6d4, #ec4899);
+      background: linear-gradient(135deg, #facc15, #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: flex;
+      filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.4));
     }
 
     .nav-links {
@@ -139,11 +140,11 @@
     }
 
     .nav-link:hover {
-      color: var(--text);
+      color: var(--yellow);
     }
 
     .btn-github {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-card);
       color: var(--text);
       padding: 8px 16px;
@@ -158,8 +159,9 @@
     }
 
     .btn-github:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(250, 204, 21, 0.15);
+      border-color: rgba(250, 204, 21, 0.4);
+      color: var(--yellow);
     }
 
     /* Hero Section */
@@ -181,9 +183,9 @@
       gap: 8px;
       padding: 6px 16px;
       border-radius: 30px;
-      background: rgba(139, 92, 246, 0.12);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      color: #c4b5fd;
+      background: rgba(250, 204, 21, 0.1);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      color: #fef08a;
       font-size: 13px;
       font-weight: 600;
       margin-bottom: 24px;
@@ -201,7 +203,7 @@
     }
 
     .hero-title span {
-      background: linear-gradient(135deg, #a78bfa, #06b6d4, #ec4899);
+      background: linear-gradient(135deg, #facc15, #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -223,27 +225,28 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--purple), var(--violet));
-      color: white;
+      background: linear-gradient(135deg, #eab308, #ca8a04);
+      color: #000;
       padding: 16px 32px;
       border-radius: 16px;
       font-size: 16px;
-      font-weight: 700;
+      font-weight: 800;
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+      box-shadow: 0 10px 30px rgba(234, 179, 8, 0.35);
       transition: all 0.25s ease;
     }
 
     .btn-primary:hover {
       transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+      box-shadow: 0 15px 40px rgba(234, 179, 8, 0.55);
+      background: linear-gradient(135deg, #facc15, #eab308);
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-card);
       color: var(--text);
       padding: 16px 28px;
@@ -259,8 +262,9 @@
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: var(--blue);
       transform: translateY(-3px);
     }
 
@@ -277,11 +281,21 @@
       border-radius: 28px;
       padding: 36px;
       backdrop-filter: blur(20px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
       display: grid;
       grid-template-columns: 1.2fr 1fr;
       gap: 32px;
       align-items: center;
+      position: relative;
+    }
+
+    .sandbox-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, #facc15, #38bdf8);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
     }
 
     .sandbox-info h3 {
@@ -303,7 +317,7 @@
     }
 
     .sim-btn {
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--border-card);
       color: var(--text);
       padding: 10px 12px;
@@ -318,17 +332,18 @@
     }
 
     .sim-btn:hover, .sim-btn.active {
-      background: rgba(139, 92, 246, 0.25);
-      border-color: var(--purple);
+      background: rgba(250, 204, 21, 0.2);
+      border-color: var(--yellow);
+      color: #fef08a;
     }
 
     /* Discord Profile Card Mockup */
     .discord-card-preview {
-      background: #18191c;
+      background: #111318;
       border-radius: 20px;
       padding: 24px;
-      border: 1px solid #2f3136;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+      border: 1px solid #1f242d;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
       position: relative;
       overflow: hidden;
     }
@@ -337,13 +352,13 @@
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; height: 4px;
-      background: linear-gradient(90deg, #8b5cf6, #06b6d4, #ec4899);
+      background: linear-gradient(90deg, #facc15, #38bdf8);
     }
 
     .discord-header {
       font-size: 11px;
       font-weight: 800;
-      color: #b9bbbe;
+      color: #94a3b8;
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 16px;
@@ -359,7 +374,7 @@
       width: 72px;
       height: 72px;
       border-radius: 18px;
-      background: #2f3136;
+      background: #1e232d;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -377,14 +392,14 @@
       position: absolute;
       bottom: 2px;
       right: 2px;
-      background: #5865f2;
+      background: #0284c7;
       border-radius: 50%;
       width: 22px;
       height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 3px solid #18191c;
+      border: 3px solid #111318;
     }
 
     .discord-details {
@@ -401,19 +416,19 @@
 
     .discord-subtitle {
       font-size: 14px;
-      color: #dcddde;
+      color: #cbd5e1;
     }
 
     .discord-timer {
       font-size: 13px;
-      color: #10b981;
-      font-weight: 600;
+      color: var(--yellow);
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    /* Downloads Grid (Antigravity Style) */
+    /* Downloads Grid */
     .download-section {
       padding: 80px 8%;
       max-width: 1100px;
@@ -456,23 +471,23 @@
     }
 
     .dl-card:hover {
-      border-color: rgba(139, 92, 246, 0.4);
+      border-color: rgba(250, 204, 21, 0.4);
       transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
     }
 
     .dl-icon {
       width: 64px;
       height: 64px;
       border-radius: 20px;
-      background: rgba(139, 92, 246, 0.15);
-      border: 1px solid rgba(139, 92, 246, 0.3);
+      background: rgba(250, 204, 21, 0.12);
+      border: 1px solid rgba(250, 204, 21, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 32px;
       margin-bottom: 20px;
-      color: #c4b5fd;
+      color: var(--yellow);
     }
 
     .dl-title {
@@ -490,7 +505,7 @@
 
     .dl-btn {
       width: 100%;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-card);
       color: var(--text);
       padding: 12px;
@@ -506,18 +521,22 @@
     }
 
     .dl-btn.featured {
-      background: linear-gradient(135deg, var(--purple), var(--violet));
+      background: linear-gradient(135deg, #eab308, #ca8a04);
+      color: #000;
       border: none;
-      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 8px 24px rgba(234, 179, 8, 0.3);
     }
 
     .dl-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: var(--blue);
       transform: scale(1.02);
     }
 
     .dl-btn.featured:hover {
-      background: linear-gradient(135deg, #a78bfa, var(--purple));
+      background: linear-gradient(135deg, #facc15, #eab308);
+      color: #000;
     }
 
     /* Features Grid */
@@ -537,7 +556,7 @@
 
     .feat-icon {
       font-size: 28px;
-      color: var(--cyan);
+      color: var(--yellow);
       margin-bottom: 12px;
     }
 
