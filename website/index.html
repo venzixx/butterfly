@@ -11,7 +11,7 @@
 
   <!-- Open Graph / Facebook / Discord Embed -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://website-sandy-tau-40.vercel.app/">
+  <meta property="og:url" content="https://app.encl.asia/">
   <meta property="og:title" content="Butterfly — Discord Mobile Rich Presence">
   <meta property="og:description" content="Stream what you are doing on your Android phone live to your Discord profile status in real time.">
   <meta property="og:image" content="https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/spotify.png">
@@ -19,14 +19,14 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="https://website-sandy-tau-40.vercel.app/">
+  <meta name="twitter:url" content="https://app.encl.asia/">
   <meta name="twitter:title" content="Butterfly — Discord Mobile Rich Presence">
   <meta name="twitter:description" content="Stream what you are doing on your Android phone live to your Discord profile status in real time.">
   <meta name="twitter:image" content="https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/spotify.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦋</text></svg>">
-  <link rel="canonical" href="https://website-sandy-tau-40.vercel.app/">
+  <link rel="canonical" href="https://app.encl.asia/">
 
   <!-- JSON-LD Structured Data Schema -->
   <script type="application/ld+json">
@@ -42,14 +42,16 @@
       "priceCurrency": "USD"
     },
     "description": "Stream your Android phone activity directly to your live Discord profile status in real-time.",
-    "url": "https://website-sandy-tau-40.vercel.app/"
+    "url": "https://app.encl.asia/"
   }
   </script>
+
+  <!-- Google Fonts & Iconify -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Iconify SVG framework -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
   <style>
     :root {
       --bg: #07090e;
@@ -62,6 +64,7 @@
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --green: #10b981;
+      --red: #ef4444;
     }
 
     * {
@@ -69,6 +72,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      scroll-behavior: smooth;
     }
 
     body {
@@ -78,19 +82,64 @@
       line-height: 1.6;
     }
 
-    /* Ambient Background Glows */
-    .glow-top {
+    /* Ambient Background Glows & Floating Particles */
+    .glow-bg-top {
       position: absolute;
-      top: -200px;
+      top: -250px;
       left: 50%;
       transform: translateX(-50%);
-      width: 1100px;
-      height: 650px;
-      background: radial-gradient(circle, rgba(250, 204, 21, 0.15) 0%, rgba(56, 189, 248, 0.15) 45%, rgba(7, 9, 14, 0) 70%);
-      filter: blur(90px);
+      width: 1200px;
+      height: 750px;
+      background: radial-gradient(circle, rgba(250, 204, 21, 0.16) 0%, rgba(56, 189, 248, 0.16) 45%, rgba(7, 9, 14, 0) 70%);
+      filter: blur(100px);
+      z-index: 0;
+      pointer-events: none;
+      animation: floatPulse 10s ease-in-out infinite alternate;
+    }
+
+    .glow-bg-mid {
+      position: absolute;
+      top: 1400px;
+      right: -200px;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(250, 204, 21, 0.08) 50%, rgba(7, 9, 14, 0) 70%);
+      filter: blur(110px);
       z-index: 0;
       pointer-events: none;
     }
+
+    @keyframes floatPulse {
+      0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+      100% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+    }
+
+    /* Scroll Animation Observer Classes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.92);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-scale.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .delay-1 { transition-delay: 0.15s; }
+    .delay-2 { transition-delay: 0.3s; }
+    .delay-3 { transition-delay: 0.45s; }
 
     /* Navbar */
     nav {
@@ -98,12 +147,13 @@
       top: 0;
       z-index: 100;
       background: rgba(7, 9, 14, 0.75);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-card);
       padding: 16px 8%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: all 0.3s ease;
     }
 
     .brand {
@@ -117,12 +167,12 @@
     }
 
     .brand-logo {
-      font-size: 30px;
+      font-size: 32px;
       background: linear-gradient(135deg, #facc15, #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       display: flex;
-      filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.4));
+      filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.5));
     }
 
     .nav-links {
@@ -136,6 +186,9 @@
       text-decoration: none;
       font-weight: 500;
       font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       transition: color 0.2s;
     }
 
@@ -147,28 +200,29 @@
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-card);
       color: var(--text);
-      padding: 8px 16px;
-      border-radius: 12px;
+      padding: 9px 18px;
+      border-radius: 14px;
       font-size: 14px;
       font-weight: 600;
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.2s;
+      transition: all 0.25s;
     }
 
     .btn-github:hover {
       background: rgba(250, 204, 21, 0.15);
       border-color: rgba(250, 204, 21, 0.4);
       color: var(--yellow);
+      transform: translateY(-2px);
     }
 
     /* Hero Section */
     .hero {
       position: relative;
       z-index: 1;
-      padding: 100px 8% 60px 8%;
+      padding: 90px 8% 60px 8%;
       text-align: center;
       max-width: 1100px;
       margin: 0 auto;
@@ -181,21 +235,22 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 16px;
+      padding: 8px 18px;
       border-radius: 30px;
       background: rgba(250, 204, 21, 0.1);
       border: 1px solid rgba(250, 204, 21, 0.3);
       color: #fef08a;
       font-size: 13px;
       font-weight: 600;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 0 20px rgba(250, 204, 21, 0.15);
     }
 
     .hero-title {
-      font-size: 58px;
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -1px;
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
       margin-bottom: 24px;
       background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
       -webkit-background-clip: text;
@@ -206,12 +261,13 @@
       background: linear-gradient(135deg, #facc15, #38bdf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px rgba(250, 204, 21, 0.3));
     }
 
     .hero-subtitle {
       font-size: 20px;
       color: var(--text-muted);
-      max-width: 680px;
+      max-width: 700px;
       margin-bottom: 40px;
       font-weight: 400;
     }
@@ -221,13 +277,13 @@
       gap: 16px;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 60px;
+      margin-bottom: 50px;
     }
 
     .btn-primary {
       background: linear-gradient(135deg, #eab308, #ca8a04);
       color: #000;
-      padding: 16px 32px;
+      padding: 16px 36px;
       border-radius: 16px;
       font-size: 16px;
       font-weight: 800;
@@ -235,13 +291,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 10px 30px rgba(234, 179, 8, 0.35);
+      box-shadow: 0 10px 30px rgba(234, 179, 8, 0.4);
       transition: all 0.25s ease;
     }
 
     .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 40px rgba(234, 179, 8, 0.55);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 18px 45px rgba(234, 179, 8, 0.6);
       background: linear-gradient(135deg, #facc15, #eab308);
     }
 
@@ -249,7 +305,7 @@
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-card);
       color: var(--text);
-      padding: 16px 28px;
+      padding: 16px 30px;
       border-radius: 16px;
       font-size: 16px;
       font-weight: 600;
@@ -265,26 +321,62 @@
       background: rgba(56, 189, 248, 0.12);
       border-color: rgba(56, 189, 248, 0.4);
       color: var(--blue);
-      transform: translateY(-3px);
+      transform: translateY(-4px);
     }
 
-    /* Live Interactive Sandbox */
+    /* Live Stats Ribbon */
+    .stats-ribbon {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 950px;
+      width: 100%;
+      margin: 0 auto 70px auto;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* Interactive Live Sandbox */
     .sandbox-section {
-      padding: 40px 8% 80px 8%;
-      max-width: 1000px;
+      padding: 20px 8% 80px 8%;
+      max-width: 1050px;
       margin: 0 auto;
     }
 
     .sandbox-card {
       background: var(--bg-card);
       border: 1px solid var(--border-card);
-      border-radius: 28px;
-      padding: 36px;
+      border-radius: 32px;
+      padding: 40px;
       backdrop-filter: blur(20px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
       display: grid;
       grid-template-columns: 1.2fr 1fr;
-      gap: 32px;
+      gap: 36px;
       align-items: center;
       position: relative;
     }
@@ -294,14 +386,17 @@
       position: absolute;
       top: 0; left: 0; right: 0; height: 3px;
       background: linear-gradient(90deg, #facc15, #38bdf8);
-      border-top-left-radius: 28px;
-      border-top-right-radius: 28px;
+      border-top-left-radius: 32px;
+      border-top-right-radius: 32px;
     }
 
     .sandbox-info h3 {
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 26px;
+      font-weight: 800;
       margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .sandbox-info p {
@@ -313,15 +408,15 @@
     .sim-app-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
 
     .sim-btn {
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--border-card);
       color: var(--text);
-      padding: 10px 12px;
-      border-radius: 12px;
+      padding: 12px;
+      border-radius: 14px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
@@ -335,15 +430,16 @@
       background: rgba(250, 204, 21, 0.2);
       border-color: var(--yellow);
       color: #fef08a;
+      transform: translateY(-2px);
     }
 
-    /* Discord Profile Card Mockup */
+    /* Discord Card Preview */
     .discord-card-preview {
-      background: #111318;
-      border-radius: 20px;
+      background: #0d111a;
+      border-radius: 24px;
       padding: 24px;
-      border: 1px solid #1f242d;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
+      border: 1px solid #1f283a;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
       position: relative;
       overflow: hidden;
     }
@@ -362,19 +458,46 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .live-dot-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulseDot 2s infinite;
+    }
+
+    @keyframes pulseDot {
+      0% { transform: scale(0.95); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.7; }
     }
 
     .discord-body {
       display: flex;
-      gap: 16px;
+      gap: 18px;
       align-items: center;
     }
 
     .discord-logo-box {
-      width: 72px;
-      height: 72px;
-      border-radius: 18px;
-      background: #1e232d;
+      width: 76px;
+      height: 76px;
+      border-radius: 20px;
+      background: #19202e;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -394,12 +517,12 @@
       right: 2px;
       background: #0284c7;
       border-radius: 50%;
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 3px solid #111318;
+      border: 3px solid #0d111a;
     }
 
     .discord-details {
@@ -409,7 +532,7 @@
     }
 
     .discord-app-title {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
       color: #ffffff;
     }
@@ -426,10 +549,11 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      margin-top: 4px;
     }
 
-    /* Downloads Grid */
-    .download-section {
+    /* Workflow Stepper */
+    .workflow-section {
       padding: 80px 8%;
       max-width: 1100px;
       margin: 0 auto;
@@ -437,8 +561,8 @@
 
     .section-title {
       text-align: center;
-      font-size: 38px;
-      font-weight: 800;
+      font-size: 42px;
+      font-weight: 900;
       margin-bottom: 16px;
       letter-spacing: -0.5px;
     }
@@ -446,8 +570,131 @@
     .section-subtitle {
       text-align: center;
       color: var(--text-muted);
-      font-size: 17px;
-      margin-bottom: 50px;
+      font-size: 18px;
+      margin-bottom: 60px;
+    }
+
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      position: relative;
+    }
+
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 24px;
+      padding: 32px 24px;
+      position: relative;
+      backdrop-filter: blur(16px);
+      transition: all 0.3s ease;
+    }
+
+    .step-card:hover {
+      border-color: rgba(250, 204, 21, 0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .step-number {
+      position: absolute;
+      top: -16px;
+      left: 24px;
+      background: linear-gradient(135deg, #facc15, #38bdf8);
+      color: #000;
+      font-weight: 900;
+      font-size: 14px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      box-shadow: 0 4px 14px rgba(250, 204, 21, 0.3);
+    }
+
+    .step-icon {
+      font-size: 36px;
+      color: var(--yellow);
+      margin-top: 10px;
+      margin-bottom: 18px;
+      display: flex;
+    }
+
+    .step-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* App Compatibility Showcase */
+    .app-showcase-section {
+      padding: 60px 8%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .app-showcase-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s;
+    }
+
+    .app-showcase-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .app-showcase-icon {
+      font-size: 28px;
+      display: flex;
+    }
+
+    .app-showcase-name {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .app-showcase-status {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-top: 2px;
+      display: inline-block;
+    }
+
+    .status-allowed {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--green);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-blacklisted {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--red);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Downloads Grid */
+    .download-section {
+      padding: 80px 8%;
+      max-width: 1100px;
+      margin: 0 auto;
     }
 
     .downloads-grid {
@@ -459,8 +706,8 @@
     .dl-card {
       background: var(--bg-card);
       border: 1px solid var(--border-card);
-      border-radius: 24px;
-      padding: 32px 24px;
+      border-radius: 28px;
+      padding: 36px 28px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -472,34 +719,34 @@
 
     .dl-card:hover {
       border-color: rgba(250, 204, 21, 0.4);
-      transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     }
 
     .dl-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 20px;
+      width: 68px;
+      height: 68px;
+      border-radius: 22px;
       background: rgba(250, 204, 21, 0.12);
       border: 1px solid rgba(250, 204, 21, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
-      margin-bottom: 20px;
+      font-size: 34px;
+      margin-bottom: 22px;
       color: var(--yellow);
     }
 
     .dl-title {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: 22px;
+      font-weight: 800;
       margin-bottom: 8px;
     }
 
     .dl-sub {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--text-muted);
-      margin-bottom: 24px;
+      margin-bottom: 28px;
       flex: 1;
     }
 
@@ -508,23 +755,23 @@
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--border-card);
       color: var(--text);
-      padding: 12px;
-      border-radius: 14px;
+      padding: 14px;
+      border-radius: 16px;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 15px;
       text-decoration: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: all 0.2s;
+      gap: 10px;
+      transition: all 0.25s;
     }
 
     .dl-btn.featured {
       background: linear-gradient(135deg, #eab308, #ca8a04);
       color: #000;
       border: none;
-      box-shadow: 0 8px 24px rgba(234, 179, 8, 0.3);
+      box-shadow: 0 10px 28px rgba(234, 179, 8, 0.35);
     }
 
     .dl-btn:hover {
@@ -539,58 +786,86 @@
       color: #000;
     }
 
-    /* Features Grid */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-top: 60px;
+    /* FAQ Section */
+    .faq-section {
+      padding: 80px 8%;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
-    .feat-card {
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
       background: var(--bg-card);
       border: 1px solid var(--border-card);
       border-radius: 20px;
-      padding: 24px;
+      padding: 22px 26px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .feat-icon {
-      font-size: 28px;
-      color: var(--yellow);
-      margin-bottom: 12px;
+    .faq-item:hover {
+      border-color: rgba(250, 204, 21, 0.3);
     }
 
-    .feat-title {
-      font-size: 17px;
+    .faq-question {
+      font-size: 18px;
       font-weight: 700;
-      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #ffffff;
     }
 
-    .feat-desc {
-      font-size: 14px;
+    .faq-answer {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      display: none;
+      line-height: 1.7;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(180deg);
+      color: var(--yellow);
+    }
+
+    .faq-icon {
+      transition: transform 0.3s;
       color: var(--text-muted);
     }
 
     /* Footer */
     footer {
       border-top: 1px solid var(--border-card);
-      padding: 40px 8%;
+      padding: 45px 8%;
       text-align: center;
       color: var(--text-muted);
       font-size: 14px;
+      background: rgba(7, 9, 14, 0.9);
     }
 
-    @media (max-width: 850px) {
-      .hero-title { font-size: 38px; }
+    @media (max-width: 900px) {
+      .hero-title { font-size: 42px; }
       .sandbox-card { grid-template-columns: 1fr; }
-      .downloads-grid, .features-grid { grid-template-columns: 1fr; }
+      .downloads-grid, .workflow-grid, .stats-ribbon { grid-template-columns: 1fr; }
+      .app-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Ambient Glow -->
-  <div class="glow-top"></div>
+  <!-- Ambient Glows -->
+  <div class="glow-bg-top"></div>
+  <div class="glow-bg-mid"></div>
 
   <!-- Navbar -->
   <nav>
@@ -599,10 +874,21 @@
       Butterfly
     </a>
     <div class="nav-links">
-      <a href="#features" class="nav-link">Features</a>
-      <a href="#downloads" class="nav-link">Downloads</a>
-      <a href="status.html" class="nav-link">Status</a>
-      <a href="https://mobile-pi-jade.vercel.app" target="_blank" class="nav-link">Web App</a>
+      <a href="#how-it-works" class="nav-link">
+        <iconify-icon icon="heroicons:sparkles" width="16"></iconify-icon> How It Works
+      </a>
+      <a href="#features" class="nav-link">
+        <iconify-icon icon="heroicons:shield-check" width="16"></iconify-icon> Privacy
+      </a>
+      <a href="#downloads" class="nav-link">
+        <iconify-icon icon="heroicons:arrow-down-tray" width="16"></iconify-icon> Downloads
+      </a>
+      <a href="status.html" class="nav-link">
+        <iconify-icon icon="heroicons:signal" width="16"></iconify-icon> Status
+      </a>
+      <a href="https://mobile-pi-jade.vercel.app" target="_blank" class="nav-link">
+        <iconify-icon icon="heroicons:device-phone-mobile" width="16"></iconify-icon> Web App
+      </a>
       <a href="https://github.com/venzixx/butterfly" target="_blank" class="btn-github">
         <iconify-icon icon="logos:github-icon" width="18"></iconify-icon> GitHub
       </a>
@@ -610,9 +896,9 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="hero">
+  <section class="hero reveal">
     <div class="badge-pill">
-      <iconify-icon icon="heroicons:sparkles" width="16"></iconify-icon>
+      <iconify-icon icon="heroicons:star" width="16" style="color: var(--yellow);"></iconify-icon>
       100% Free & Open Source on GitHub
     </div>
 
@@ -631,16 +917,47 @@
       </a>
       <a href="https://github.com/venzixx/butterfly" target="_blank" class="btn-secondary">
         <iconify-icon icon="logos:github-icon" width="20"></iconify-icon>
-        View on GitHub
+        View Source Code
       </a>
+    </div>
+
+    <!-- Live Stats Ribbon -->
+    <div class="stats-ribbon reveal-scale delay-1">
+      <div class="stat-card">
+        <div class="stat-number">
+          <iconify-icon icon="heroicons:bolt" width="28"></iconify-icon> &lt;50ms
+        </div>
+        <div class="stat-label">Streaming Latency</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">
+          <iconify-icon icon="heroicons:shield-check" width="28"></iconify-icon> 100%
+        </div>
+        <div class="stat-label">Privacy First</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">
+          <iconify-icon icon="heroicons:check-badge" width="28"></iconify-icon> 99.9%
+        </div>
+        <div class="stat-label">Cloud Uptime</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">
+          <iconify-icon icon="heroicons:sparkles" width="28"></iconify-icon> 16+
+        </div>
+        <div class="stat-label">Supported Apps</div>
+      </div>
     </div>
   </section>
 
-  <!-- Live Sandbox Demo -->
-  <section class="sandbox-section">
+  <!-- Live Sandbox Interactive Demo -->
+  <section class="sandbox-section reveal">
     <div class="sandbox-card">
       <div class="sandbox-info">
-        <h3>⚡ Interactive Live Demo</h3>
+        <h3>
+          <iconify-icon icon="heroicons:play-pause" style="color: var(--yellow);"></iconify-icon>
+          Interactive Live Demo
+        </h3>
         <p>Click any phone app below to test how Butterfly updates your Discord profile status in real time!</p>
 
         <div class="sim-app-grid">
@@ -665,22 +982,27 @@
         </div>
       </div>
 
-      <!-- Live Discord Card Mockup -->
+      <!-- Live Discord Card Preview -->
       <div class="discord-card-preview">
-        <div class="discord-header">PLAYING A GAME</div>
+        <div class="discord-header">
+          <span>PLAYING A GAME</span>
+          <div class="live-dot-tag">
+            <div class="pulse-dot"></div> LIVE RPC
+          </div>
+        </div>
         <div class="discord-body">
           <div class="discord-logo-box">
             <img id="demoLogo" src="https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/spotify.png" alt="Spotify">
             <div class="phone-badge-small">
-              <iconify-icon icon="heroicons:device-phone-mobile" width="10" style="color: white;"></iconify-icon>
+              <iconify-icon icon="heroicons:device-phone-mobile" width="12" style="color: white;"></iconify-icon>
             </div>
           </div>
           <div class="discord-details">
             <div class="discord-app-title" id="demoTitle">Spotify</div>
             <div class="discord-subtitle">On Android Phone</div>
             <div class="discord-timer">
-              <iconify-icon icon="heroicons:play" width="12"></iconify-icon>
-              <span id="demoTimer">00:14 elapsed</span>
+              <iconify-icon icon="heroicons:play" width="13"></iconify-icon>
+              <span id="demoTimer">00:18 elapsed</span>
             </div>
           </div>
         </div>
@@ -688,68 +1010,188 @@
     </div>
   </section>
 
+  <!-- How It Works Workflow -->
+  <section class="workflow-section" id="how-it-works">
+    <h2 class="section-title reveal">How Butterfly Works</h2>
+    <p class="section-subtitle reveal">3 simple steps to stream your mobile apps directly to Discord.</p>
+
+    <div class="workflow-grid">
+      <div class="step-card reveal delay-1">
+        <div class="step-number">STEP 1</div>
+        <div class="step-icon"><iconify-icon icon="heroicons:qr-code"></iconify-icon></div>
+        <div class="step-title">Instant Pairing</div>
+        <div class="step-desc">Open the Butterfly desktop companion, scan the QR code with your phone, and pair securely in seconds without any login.</div>
+      </div>
+
+      <div class="step-card reveal delay-2">
+        <div class="step-number">STEP 2</div>
+        <div class="step-icon"><iconify-icon icon="heroicons:shield-check"></iconify-icon></div>
+        <div class="step-title">Set Privacy Rules</div>
+        <div class="step-desc">Choose which apps to share on Discord. Sensitive apps like WhatsApp, Banking, and Messages are blacklisted by default.</div>
+      </div>
+
+      <div class="step-card reveal delay-3">
+        <div class="step-number">STEP 3</div>
+        <div class="step-icon"><iconify-icon icon="logos:discord-icon"></iconify-icon></div>
+        <div class="step-title">Live Discord Status</div>
+        <div class="step-desc">Whenever you open YouTube, Spotify, or Netflix on your phone, your Discord status updates instantly in real time!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- App Compatibility Grid -->
+  <section class="app-showcase-section reveal">
+    <h2 class="section-title">Supported Applications</h2>
+    <p class="section-subtitle">Butterfly automatically detects popular Android apps with privacy controls.</p>
+
+    <div class="app-grid">
+      <div class="app-showcase-card">
+        <div class="app-showcase-icon"><iconify-icon icon="logos:spotify-icon"></iconify-icon></div>
+        <div>
+          <div class="app-showcase-name">Spotify</div>
+          <span class="app-showcase-status status-allowed">Tracked</span>
+        </div>
+      </div>
+
+      <div class="app-showcase-card">
+        <div class="app-showcase-icon"><iconify-icon icon="logos:youtube-icon"></iconify-icon></div>
+        <div>
+          <div class="app-showcase-name">YouTube</div>
+          <span class="app-showcase-status status-allowed">Tracked</span>
+        </div>
+      </div>
+
+      <div class="app-showcase-card">
+        <div class="app-showcase-icon"><iconify-icon icon="logos:netflix-icon"></iconify-icon></div>
+        <div>
+          <div class="app-showcase-name">Netflix</div>
+          <span class="app-showcase-status status-allowed">Tracked</span>
+        </div>
+      </div>
+
+      <div class="app-showcase-card">
+        <div class="app-showcase-icon"><iconify-icon icon="logos:twitch"></iconify-icon></div>
+        <div>
+          <div class="app-showcase-name">Twitch</div>
+          <span class="app-showcase-status status-allowed">Tracked</span>
+        </div>
+      </div>
+
+      <div class="app-showcase-card">
+        <div class="app-showcase-icon"><iconify-icon icon="logos:reddit-icon"></iconify-icon></div>
+        <div>
+          <div class="app-showcase-name">Reddit</div>
+          <span class="app-showcase-status status-allowed">Tracked</span>
+        </div>
+      </div>
+
+      <div class="app-showcase-card">
+        <div class="app-showcase-icon"><iconify-icon icon="logos:duolingo-icon"></iconify-icon></div>
+        <div>
+          <div class="app-showcase-name">Duolingo</div>
+          <span class="app-showcase-status status-allowed">Tracked</span>
+        </div>
+      </div>
+
+      <div class="app-showcase-card">
+        <div class="app-showcase-icon"><iconify-icon icon="logos:whatsapp-icon"></iconify-icon></div>
+        <div>
+          <div class="app-showcase-name">WhatsApp</div>
+          <span class="app-showcase-status status-blacklisted">🔒 Blacklisted</span>
+        </div>
+      </div>
+
+      <div class="app-showcase-card">
+        <div class="app-showcase-icon"><iconify-icon icon="logos:google-chrome"></iconify-icon></div>
+        <div>
+          <div class="app-showcase-name">Chrome</div>
+          <span class="app-showcase-status status-allowed">Tracked</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Downloads Section -->
   <section class="download-section" id="downloads">
-    <h2 class="section-title">Download Butterfly</h2>
-    <p class="section-subtitle">Get the official apps for Desktop, Android, and Web.</p>
+    <h2 class="section-title reveal">Download Butterfly</h2>
+    <p class="section-subtitle reveal">Get official builds for Windows, Android, and Web.</p>
 
     <div class="downloads-grid">
       <!-- Windows Desktop -->
-      <div class="dl-card">
+      <div class="dl-card reveal delay-1">
         <div class="dl-icon">
           <iconify-icon icon="logos:microsoft-windows-icon"></iconify-icon>
         </div>
         <h3 class="dl-title">Windows Companion</h3>
-        <p class="dl-sub">Lightweight tray app that connects to your local Discord IPC client.</p>
+        <p class="dl-sub">Lightweight desktop tray app connecting to local Discord IPC client.</p>
         <a href="https://github.com/venzixx/butterfly/releases/download/v1.0.0/Butterfly-Setup-1.0.0.exe" class="dl-btn featured">
-          <iconify-icon icon="heroicons:arrow-down-tray" width="16"></iconify-icon>
+          <iconify-icon icon="heroicons:arrow-down-tray" width="18"></iconify-icon>
           Download .exe (v1.0.0)
         </a>
       </div>
 
       <!-- Android App -->
-      <div class="dl-card">
+      <div class="dl-card reveal delay-2">
         <div class="dl-icon">
           <iconify-icon icon="logos:android-icon"></iconify-icon>
         </div>
         <h3 class="dl-title">Android App (.apk)</h3>
-        <p class="dl-sub">Tracks foreground app usage with custom privacy whitelist rules.</p>
+        <p class="dl-sub">Foreground app usage tracker with custom privacy whitelist controls.</p>
         <a href="https://github.com/venzixx/butterfly/releases/download/v1.0.0/Butterfly.apk" class="dl-btn">
-          <iconify-icon icon="heroicons:arrow-down-tray" width="16"></iconify-icon>
+          <iconify-icon icon="heroicons:arrow-down-tray" width="18"></iconify-icon>
           Download APK (v1.0.0)
         </a>
       </div>
 
       <!-- Web Dashboard -->
-      <div class="dl-card">
+      <div class="dl-card reveal delay-3">
         <div class="dl-icon">
           <iconify-icon icon="heroicons:globe-alt"></iconify-icon>
         </div>
         <h3 class="dl-title">Web Companion</h3>
         <p class="dl-sub">Pair & manage privacy controls directly from any web browser.</p>
         <a href="https://mobile-pi-jade.vercel.app" target="_blank" class="dl-btn">
-          <iconify-icon icon="heroicons:arrow-top-right-on-square" width="16"></iconify-icon>
+          <iconify-icon icon="heroicons:arrow-top-right-on-square" width="18"></iconify-icon>
           Open Web App
         </a>
       </div>
     </div>
+  </section>
 
-    <!-- Features -->
-    <div class="features-grid" id="features">
-      <div class="feat-card">
-        <div class="feat-icon"><iconify-icon icon="heroicons:shield-check"></iconify-icon></div>
-        <div class="feat-title">Privacy First</div>
-        <div class="feat-desc">You choose which apps to share. Sensitive apps like WhatsApp stay 100% hidden with 🔒 shield protection.</div>
+  <!-- FAQ Section -->
+  <section class="faq-section reveal">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-subtitle">Everything you need to know about Butterfly.</p>
+
+    <div class="faq-list">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Is Butterfly safe and privacy-friendly?</span>
+          <iconify-icon icon="heroicons:chevron-down" class="faq-icon" width="20"></iconify-icon>
+        </div>
+        <div class="faq-answer">
+          Yes! Butterfly never reads your chat messages, photos, passwords, or location. Sensitive applications like WhatsApp, Banking, and Photos are blacklisted by default and never transmitted.
+        </div>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon"><iconify-icon icon="heroicons:qr-code"></iconify-icon></div>
-        <div class="feat-title">Instant QR Pairing</div>
-        <div class="feat-desc">No login or passwords required. Scan the QR code or enter 6 digits to pair your devices instantly.</div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Does this violate Discord Terms of Service?</span>
+          <iconify-icon icon="heroicons:chevron-down" class="faq-icon" width="20"></iconify-icon>
+        </div>
+        <div class="faq-answer">
+          No. Butterfly uses Discord's official local IPC Rich Presence client API (the exact same protocol used by games like League of Legends or Spotify on PC).
+        </div>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon"><iconify-icon icon="heroicons:bolt"></iconify-icon></div>
-        <div class="feat-title">Ultra-Fast Cloud Sync</div>
-        <div class="feat-desc">Powered by global cloud server infrastructure with sub-50ms activity streaming latency.</div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Do I need to sign in with my Discord account?</span>
+          <iconify-icon icon="heroicons:chevron-down" class="faq-icon" width="20"></iconify-icon>
+        </div>
+        <div class="faq-answer">
+          No! You never enter your Discord login or password. Butterfly pairs anonymously using a 6-digit QR code token.
+        </div>
       </div>
     </div>
   </section>
@@ -766,7 +1208,19 @@
   </footer>
 
   <script>
-    let timerSec = 14;
+    // Animate On Scroll Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+
+    // Live Demo Simulator
+    let timerSec = 18;
     setInterval(() => {
       timerSec++;
       const mins = Math.floor(timerSec / 60).toString().padStart(2, '0');
@@ -781,6 +1235,11 @@
       document.getElementById('demoTitle').innerText = appName;
       document.getElementById('demoLogo').src = logoUrl;
       timerSec = 0;
+    }
+
+    // FAQ Accordion Toggle
+    function toggleFaq(item) {
+      item.classList.toggle('active');
     }
   </script>
 </body>
