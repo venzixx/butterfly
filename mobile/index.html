@@ -53,7 +53,6 @@
       position: relative;
     }
 
-    /* Notch */
     .notch {
       width: 140px;
       height: 24px;
@@ -173,112 +172,121 @@
       transition: opacity 0.2s;
     }
 
-    .btn:hover {
-      opacity: 0.9;
-    }
+    .btn:hover { opacity: 0.9; }
 
     /* App Privacy List */
-    .app-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
+    .app-list { display: flex; flex-direction: column; gap: 10px; }
     .app-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--card-border);
-      padding: 12px 14px;
-      border-radius: 14px;
-      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(0, 0, 0, 0.25); border: 1px solid var(--card-border);
+      padding: 12px 14px; border-radius: 14px; transition: all 0.2s;
     }
-
-    .app-item:hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .app-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .app-icon {
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-    }
-
-    .app-name {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .app-pkg {
-      font-size: 11px;
-      color: var(--muted);
-    }
+    .app-item:hover { background: rgba(255, 255, 255, 0.05); }
+    .app-info { display: flex; align-items: center; gap: 12px; }
+    .app-icon { font-size: 24px; display: flex; align-items: center; }
+    .app-name { font-size: 14px; font-weight: 600; }
+    .app-pkg { font-size: 11px; color: var(--muted); }
 
     /* Toggle Switch */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 44px;
-      height: 24px;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #374151;
-      transition: .3s;
-      border-radius: 24px;
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #374151; transition: .3s; border-radius: 24px;
     }
-
     .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: white; transition: .3s; border-radius: 50%;
     }
+    input:checked + .slider { background-color: var(--purple); }
+    input:checked + .slider:before { transform: translateX(20px); }
 
-    input:checked + .slider {
-      background-color: var(--purple);
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(20px);
-    }
-
-    /* Foreground Activity Simulator */
     .active-badge {
       background: rgba(139, 92, 246, 0.15);
       border: 1px solid rgba(139, 92, 246, 0.3);
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 14px; padding: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .active-info { display: flex; align-items: center; gap: 10px; }
+
+    /* Privacy Consent Modal Overlay */
+    .modal-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(9, 7, 20, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 200;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      padding: 30px 24px;
+      overflow-y: auto;
     }
 
-    .active-info {
+    .modal-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-logo {
+      font-size: 40px;
+      color: var(--purple);
+      margin-bottom: 8px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .modal-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .privacy-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .privacy-box h4 {
+      color: #c4b5fd;
+      font-size: 14px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
+      gap: 6px;
+    }
+
+    .privacy-list {
+      padding-left: 18px;
+      margin-top: 8px;
+    }
+
+    .privacy-list li {
+      margin-bottom: 4px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: flex-start;
       gap: 10px;
+      font-size: 12px;
+      color: var(--text);
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .checkbox-label input {
+      margin-top: 2px;
+      accent-color: var(--purple);
     }
   </style>
 </head>
@@ -287,6 +295,34 @@
   <div class="phone-container">
     <!-- Phone Notch -->
     <div class="notch"></div>
+
+    <!-- Onboarding Privacy Consent Modal -->
+    <div class="modal-overlay" id="privacyModal">
+      <div class="modal-header">
+        <div class="modal-logo"><iconify-icon icon="lucide:butterfly"></iconify-icon></div>
+        <div class="modal-title">Welcome to Butterfly</div>
+        <div class="modal-sub">Privacy & Data Consent</div>
+      </div>
+
+      <div class="privacy-box">
+        <h4><iconify-icon icon="heroicons:shield-check"></iconify-icon> Your Privacy Comes First</h4>
+        Before pairing, please review how Butterfly handles your data:
+        <ul class="privacy-list">
+          <li><strong>Collected Data:</strong> Only open app name (e.g. Spotify) and duration.</li>
+          <li><strong>Never Collected:</strong> Messages, photos, location, passwords, or screen content.</li>
+          <li><strong>Default Blacklist:</strong> WhatsApp, Banking, and Messaging apps are <strong>never</strong> tracked or shared.</li>
+        </ul>
+      </div>
+
+      <label class="checkbox-label">
+        <input type="checkbox" id="consentCheckbox" onchange="toggleAcceptBtn()">
+        <span>I agree to the Butterfly <a href="https://website-sandy-tau-40.vercel.app/privacy.html" target="_blank" style="color: #c4b5fd;">Privacy Policy</a> and <a href="https://website-sandy-tau-40.vercel.app/terms.html" target="_blank" style="color: #c4b5fd;">Terms of Service</a>.</span>
+      </label>
+
+      <button class="btn" id="acceptBtn" style="width: 100%; justify-content: center; opacity: 0.5;" disabled onclick="acceptPrivacyConsent()">
+        Accept & Continue
+      </button>
+    </div>
 
     <!-- App Header -->
     <div class="header">
@@ -334,7 +370,7 @@
       <div class="card">
         <div class="card-header">
           <iconify-icon icon="heroicons:shield-check" width="18"></iconify-icon>
-          App Privacy Rules (Iconify)
+          App Privacy Rules
         </div>
 
         <div class="app-list" id="appList">
@@ -350,7 +386,6 @@
     let deviceToken = null;
     let pairingId = null;
 
-    // Installed apps database with Iconify icons
     const apps = [
       { name: 'YouTube', pkg: 'com.google.android.youtube', icon: 'logos:youtube-icon', allowed: true },
       { name: 'Spotify', pkg: 'com.spotify.music', icon: 'logos:spotify-icon', allowed: true },
@@ -361,6 +396,25 @@
       { name: 'WhatsApp (Private)', pkg: 'com.whatsapp', icon: 'logos:whatsapp-icon', allowed: false },
       { name: 'Duolingo', pkg: 'com.duolingo', icon: 'logos:duolingo-icon', allowed: true },
     ];
+
+    function checkConsent() {
+      const consent = localStorage.getItem('butterfly_privacy_consent');
+      if (consent === 'granted') {
+        document.getElementById('privacyModal').style.display = 'none';
+      }
+    }
+
+    function toggleAcceptBtn() {
+      const cb = document.getElementById('consentCheckbox');
+      const btn = document.getElementById('acceptBtn');
+      btn.disabled = !cb.checked;
+      btn.style.opacity = cb.checked ? '1' : '0.5';
+    }
+
+    function acceptPrivacyConsent() {
+      localStorage.setItem('butterfly_privacy_consent', 'granted');
+      document.getElementById('privacyModal').style.display = 'none';
+    }
 
     function renderApps() {
       const container = document.getElementById('appList');
@@ -432,7 +486,6 @@
 
       if (!deviceToken) return;
 
-      // Send activity to Cloud Server
       await fetch(`${SERVER_URL}/api/activity`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -444,7 +497,10 @@
       });
     }
 
-    window.onload = renderApps;
+    window.onload = () => {
+      checkConsent();
+      renderApps();
+    };
   </script>
 </body>
 </html>
