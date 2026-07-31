@@ -6,17 +6,18 @@
   <title>Butterfly 🦋 Mobile</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Iconify Framework -->
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
   <style>
     :root {
       --bg: #07090e;
-      --card: rgba(255, 255, 255, 0.03);
-      --card-border: rgba(255, 255, 255, 0.08);
+      --card-glass: rgba(255, 255, 255, 0.04);
+      --card-border: rgba(255, 255, 255, 0.1);
       --yellow: #facc15;
-      --yellow-dark: #ca8a04;
+      --yellow-glow: #eab308;
       --blue: #38bdf8;
+      --blue-dark: #0284c7;
       --green: #10b981;
       --red: #ef4444;
       --text: #f8fafc;
@@ -27,11 +28,13 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Outfit', sans-serif;
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: var(--bg);
+      background: #040508;
       color: var(--text);
       display: flex;
       justify-content: center;
@@ -40,97 +43,180 @@
       padding: 20px;
     }
 
+    /* Smartphone Frame with Dynamic Island */
     .phone-container {
-      width: 380px;
-      height: 740px;
-      background: #0d111a;
-      border: 8px solid #1c2230;
-      border-radius: 44px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(250, 204, 21, 0.15);
+      width: 390px;
+      height: 780px;
+      background: #080a10;
+      border: 10px solid #1a1e2b;
+      border-radius: 50px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(250, 204, 21, 0.15);
       display: flex;
       flex-direction: column;
       overflow: hidden;
       position: relative;
     }
 
-    .notch {
-      width: 140px;
-      height: 24px;
-      background: #1c2230;
+    /* iPhone Dynamic Island Notch */
+    .dynamic-island {
+      width: 125px;
+      height: 28px;
+      background: #000000;
       position: absolute;
-      top: 0;
+      top: 12px;
       left: 50%;
       transform: translateX(-50%);
-      border-bottom-left-radius: 16px;
-      border-bottom-right-radius: 16px;
-      z-index: 100;
+      border-radius: 20px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
+    .island-cam {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #111;
+      border: 2px solid #222;
+    }
+
+    .island-status {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Liquid Glass Background Orbs */
+    .liquid-orb-1 {
+      position: absolute;
+      top: -60px;
+      left: -40px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(250, 204, 21, 0.22) 0%, rgba(7, 9, 14, 0) 70%);
+      filter: blur(50px);
+      pointer-events: none;
+      animation: floatLiquid 8s ease-in-out infinite alternate;
+    }
+
+    .liquid-orb-2 {
+      position: absolute;
+      bottom: 80px;
+      right: -50px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(7, 9, 14, 0) 70%);
+      filter: blur(60px);
+      pointer-events: none;
+      animation: floatLiquid 10s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes floatLiquid {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 30px) scale(1.15); }
+    }
+
+    /* Header Bar */
     .header {
-      padding: 40px 24px 16px 24px;
+      padding: 50px 24px 16px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(13, 17, 26, 0.8);
-      backdrop-filter: blur(10px);
+      background: rgba(8, 10, 16, 0.65);
+      backdrop-filter: blur(24px);
+      z-index: 10;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 18px;
-      font-weight: 700;
-      color: #fef08a;
+      font-size: 19px;
+      font-weight: 800;
+      color: #ffffff;
     }
 
-    .status-tag {
+    .brand-icon {
+      font-size: 24px;
+      background: linear-gradient(135deg, #facc15, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+    }
+
+    .status-badge {
       font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: 700;
       background: rgba(16, 185, 129, 0.15);
       color: var(--green);
       border: 1px solid rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .status-tag.unpaired {
+    .status-badge.unpaired {
       background: rgba(239, 68, 68, 0.15);
       color: var(--red);
       border-color: rgba(239, 68, 68, 0.3);
     }
 
+    /* Main Scrollable View */
     .content {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 20px 20px 90px 20px; /* space for floating dock */
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
+      z-index: 1;
     }
 
-    .card {
-      background: var(--card);
+    /* Liquid Glass Cards */
+    .glass-card {
+      background: var(--card-glass);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 18px;
+      border-radius: 24px;
+      padding: 20px;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
       gap: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, rgba(250, 204, 21, 0.5), rgba(56, 189, 248, 0.5));
     }
 
     .card-header {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 13px;
+      font-weight: 700;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
     }
 
+    /* Input & Pairing */
     .pair-input-group {
       display: flex;
       gap: 10px;
@@ -140,92 +226,178 @@
       flex: 1;
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 14px;
+      padding: 12px 14px;
       color: var(--text);
       font-size: 15px;
       font-weight: 600;
       outline: none;
+      transition: all 0.2s;
     }
 
     input[type="text"]:focus {
       border-color: var(--yellow);
+      box-shadow: 0 0 16px rgba(250, 204, 21, 0.2);
     }
 
-    .btn {
+    .btn-liquid {
       background: linear-gradient(135deg, #eab308, #ca8a04);
       color: #000;
       border: none;
-      border-radius: 12px;
-      padding: 12px 18px;
+      border-radius: 14px;
+      padding: 12px 20px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: opacity 0.2s;
+      box-shadow: 0 6px 18px rgba(234, 179, 8, 0.35);
+      transition: all 0.2s;
     }
 
-    .btn:hover { opacity: 0.9; }
+    .btn-liquid:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(234, 179, 8, 0.5);
+    }
 
+    /* Active Foreground App Card */
+    .active-badge {
+      background: rgba(250, 204, 21, 0.1);
+      border: 1px solid rgba(250, 204, 21, 0.25);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .active-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .active-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    /* App Rules List */
     .app-list { display: flex; flex-direction: column; gap: 10px; }
 
     .app-item {
-      display: flex; align-items: center; justify-content: space-between;
-      background: rgba(0, 0, 0, 0.25); border: 1px solid var(--card-border);
-      padding: 12px 14px; border-radius: 14px; transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      padding: 12px 14px;
+      border-radius: 16px;
+      transition: all 0.2s;
     }
 
-    .app-item:hover { background: rgba(255, 255, 255, 0.05); }
+    .app-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
     .app-info { display: flex; align-items: center; gap: 12px; }
     .app-icon { font-size: 24px; display: flex; align-items: center; }
-    .app-name { font-size: 14px; font-weight: 600; }
+    .app-name { font-size: 14px; font-weight: 700; }
     .app-pkg { font-size: 11px; color: var(--muted); }
 
-    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    /* Custom iOS Toggle Switch */
+    .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
       position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #374151; transition: .3s; border-radius: 24px;
+      background-color: #374151; transition: .3s; border-radius: 26px;
     }
     .slider:before {
-      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
       background-color: white; transition: .3s; border-radius: 50%;
     }
     input:checked + .slider { background-color: var(--yellow); }
     input:checked + .slider:before { transform: translateX(20px); }
 
-    .active-badge {
-      background: rgba(250, 204, 21, 0.12);
-      border: 1px solid rgba(250, 204, 21, 0.25);
-      border-radius: 14px; padding: 14px;
-      display: flex; align-items: center; justify-content: space-between;
+    /* Floating iPhone Bottom Dock / Navigation Bar */
+    .floating-dock {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      height: 64px;
+      background: rgba(13, 17, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 32px;
+      backdrop-filter: blur(30px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(250, 204, 21, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 10px;
+      z-index: 150;
     }
-    .active-info { display: flex; align-items: center; gap: 10px; }
 
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 8px 14px;
+      border-radius: 20px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .dock-item iconify-icon {
+      font-size: 22px;
+    }
+
+    .dock-label {
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .dock-item.active {
+      color: #fef08a;
+      background: rgba(250, 204, 21, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Privacy Consent Modal Overlay */
     .modal-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(7, 9, 14, 0.96);
-      backdrop-filter: blur(12px);
-      z-index: 200;
+      backdrop-filter: blur(16px);
+      z-index: 300;
       display: flex;
       flex-direction: column;
-      padding: 30px 24px;
+      padding: 40px 24px;
       overflow-y: auto;
     }
 
     .modal-header { text-align: center; margin-bottom: 20px; }
-    .modal-logo { font-size: 40px; color: var(--yellow); margin-bottom: 8px; }
-    .modal-title { font-size: 20px; font-weight: 800; color: #fff; }
+    .modal-logo { font-size: 42px; color: var(--yellow); margin-bottom: 8px; }
+    .modal-title { font-size: 22px; font-weight: 800; color: #fff; }
     .modal-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
 
     .privacy-box {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 20px;
+      padding: 18px;
       font-size: 13px;
       color: #d1d5db;
       line-height: 1.6;
@@ -234,15 +406,15 @@
 
     .privacy-box h4 {
       color: #fef08a;
-      font-size: 14px;
-      margin-bottom: 8px;
+      font-size: 15px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
     .privacy-list { padding-left: 18px; margin-top: 8px; }
-    .privacy-list li { margin-bottom: 4px; }
+    .privacy-list li { margin-bottom: 6px; }
 
     .checkbox-label {
       display: flex;
@@ -260,22 +432,32 @@
 <body>
 
   <div class="phone-container">
-    <div class="notch"></div>
+    <!-- Liquid Background Glows -->
+    <div class="liquid-orb-1"></div>
+    <div class="liquid-orb-2"></div>
+
+    <!-- iPhone Dynamic Island -->
+    <div class="dynamic-island">
+      <div class="island-cam"></div>
+      <div class="island-status">
+        <iconify-icon icon="heroicons:bolt" width="12"></iconify-icon> LIVE
+      </div>
+    </div>
 
     <!-- Onboarding Privacy Consent Modal -->
     <div class="modal-overlay" id="privacyModal">
       <div class="modal-header">
         <div class="modal-logo"><iconify-icon icon="lucide:butterfly"></iconify-icon></div>
         <div class="modal-title">Welcome to Butterfly</div>
-        <div class="modal-sub">Privacy & Data Consent</div>
+        <div class="modal-sub">Liquid Privacy & Consent</div>
       </div>
 
       <div class="privacy-box">
         <h4><iconify-icon icon="heroicons:shield-check"></iconify-icon> Your Privacy Comes First</h4>
         Before pairing, please review how Butterfly handles your data:
         <ul class="privacy-list">
-          <li><strong>Universal Support:</strong> Tracks any Android app you open (10,000+ apps).</li>
-          <li><strong>Never Collected:</strong> Messages, photos, location, passwords, or screen content.</li>
+          <li><strong>Universal Support:</strong> Tracks any open Android app name (10,000+ apps).</li>
+          <li><strong>Never Collected:</strong> Chat messages, photos, passwords, location, or screen content.</li>
           <li><strong>Default Blacklist:</strong> WhatsApp, Banking, and Messaging apps are <strong>never</strong> tracked or shared.</li>
         </ul>
       </div>
@@ -285,7 +467,7 @@
         <span>I agree to the Butterfly <a href="https://app.encl.asia/privacy" target="_blank" style="color: #fef08a;">Privacy Policy</a> and <a href="https://app.encl.asia/terms" target="_blank" style="color: #fef08a;">Terms of Service</a>.</span>
       </label>
 
-      <button class="btn" id="acceptBtn" style="width: 100%; justify-content: center; opacity: 0.5;" disabled onclick="acceptPrivacyConsent()">
+      <button class="btn-liquid" id="acceptBtn" style="width: 100%; justify-content: center; opacity: 0.5;" disabled onclick="acceptPrivacyConsent()">
         Accept & Continue
       </button>
     </div>
@@ -293,56 +475,85 @@
     <!-- App Header -->
     <div class="header">
       <div class="brand">
-        <iconify-icon icon="lucide:butterfly" width="24"></iconify-icon>
-        Butterfly Mobile
+        <span class="brand-icon"><iconify-icon icon="lucide:butterfly"></iconify-icon></span>
+        Butterfly
       </div>
-      <div class="status-tag unpaired" id="statusTag">UNPAIRED</div>
+      <div class="status-badge unpaired" id="statusTag">
+        <iconify-icon icon="heroicons:signal-slash" width="14"></iconify-icon> UNPAIRED
+      </div>
     </div>
 
-    <!-- Scroll Content -->
-    <div class="content">
+    <!-- Scrollable Content -->
+    <div class="content" id="scrollContent">
 
-      <div class="card">
+      <!-- Pairing Card -->
+      <div class="glass-card" id="section-pair">
         <div class="card-header">
           <iconify-icon icon="heroicons:qr-code" width="18"></iconify-icon>
-          Pair with Desktop App
+          Instant Pairing
         </div>
         <div class="pair-input-group">
           <input type="text" id="codeInput" placeholder="BFLY-1234" value="BFLY-">
-          <button class="btn" onclick="pairWithCode()">Pair</button>
+          <button class="btn-liquid" onclick="pairWithCode()">Pair</button>
         </div>
       </div>
 
-      <div class="card">
+      <!-- Active App Foreground Card -->
+      <div class="glass-card" id="section-active">
         <div class="card-header">
           <iconify-icon icon="heroicons:device-phone-mobile" width="18"></iconify-icon>
-          Foreground Tracker (Tap to Test)
+          Foreground App Tracker
         </div>
 
         <div class="active-badge" id="activeAppBadge">
           <div class="active-info">
-            <iconify-icon id="currentAppIcon" icon="heroicons:device-phone-mobile" width="24" style="color: var(--yellow);"></iconify-icon>
+            <div class="active-icon-box">
+              <iconify-icon id="currentAppIcon" icon="heroicons:device-phone-mobile" style="color: var(--yellow);"></iconify-icon>
+            </div>
             <div>
-              <div id="currentAppName" style="font-weight: 700; font-size: 15px;">Phone Lock Screen</div>
-              <div id="currentAppSub" style="font-size: 12px; color: var(--muted);">Tap any app below to test tracking</div>
+              <div id="currentAppName" style="font-weight: 700; font-size: 15px;">Lock Screen</div>
+              <div id="currentAppSub" style="font-size: 12px; color: var(--muted);">Tap any app below to test live status</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Installed Apps & Search -->
-      <div class="card">
+      <!-- App Privacy Rules Grid -->
+      <div class="glass-card" id="section-rules">
         <div class="card-header">
           <iconify-icon icon="heroicons:shield-check" width="18"></iconify-icon>
-          Installed Apps Privacy Rules
+          Installed App Rules
         </div>
 
-        <input type="text" id="mobileSearchInput" placeholder="Filter installed apps..." oninput="filterMobileApps()" style="margin-bottom: 6px;">
+        <input type="text" id="mobileSearchInput" placeholder="Filter installed apps..." oninput="filterMobileApps()">
 
         <div class="app-list" id="appList">
         </div>
       </div>
 
+    </div>
+
+    <!-- Floating iPhone Navigation Bar / Bottom Dock -->
+    <div class="floating-dock">
+      <div class="dock-item active" onclick="switchDockTab('pair', this)">
+        <iconify-icon icon="heroicons:bolt"></iconify-icon>
+        <span class="dock-label">Pair</span>
+      </div>
+
+      <div class="dock-item" onclick="switchDockTab('active', this)">
+        <iconify-icon icon="heroicons:device-phone-mobile"></iconify-icon>
+        <span class="dock-label">Tracker</span>
+      </div>
+
+      <div class="dock-item" onclick="switchDockTab('rules', this)">
+        <iconify-icon icon="heroicons:shield-check"></iconify-icon>
+        <span class="dock-label">Privacy</span>
+      </div>
+
+      <div class="dock-item" onclick="window.open('https://app.encl.asia/status', '_blank')">
+        <iconify-icon icon="heroicons:signal"></iconify-icon>
+        <span class="dock-label">Status</span>
+      </div>
     </div>
   </div>
 
@@ -414,6 +625,16 @@
       renderApps(filtered.length ? filtered : apps);
     }
 
+    function switchDockTab(tabId, el) {
+      document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
+      el.classList.add('active');
+
+      const target = document.getElementById(`section-${tabId}`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
     async function pairWithCode() {
       const code = document.getElementById('codeInput').value.trim();
       if (!code) return alert('Please enter a 6-digit code');
@@ -431,8 +652,8 @@
           pairingId = data.pairingId;
 
           const tag = document.getElementById('statusTag');
-          tag.innerText = 'PAIRED';
-          tag.className = 'status-tag';
+          tag.innerHTML = '<iconify-icon icon="heroicons:check-circle" width="14"></iconify-icon> PAIRED';
+          tag.className = 'status-badge';
           alert('Butterfly Mobile paired successfully!');
         } else {
           alert('Pairing failed: ' + data.error);
