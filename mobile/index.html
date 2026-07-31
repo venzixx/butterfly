@@ -221,6 +221,7 @@
       box-shadow: 0 0 16px rgba(250, 204, 21, 0.2);
     }
 
+    /* Uniform Gold Liquid Button */
     .btn-liquid {
       background: linear-gradient(135deg, #eab308, #ca8a04);
       color: #000;
@@ -240,28 +241,12 @@
 
     .btn-liquid:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(234, 179, 8, 0.5);
+      box-shadow: 0 10px 24px rgba(234, 179, 8, 0.55);
+      background: linear-gradient(135deg, #facc15, #eab308);
     }
 
-    .btn-scan-qr {
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: var(--blue);
-      border-radius: 16px;
-      padding: 16px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: all 0.2s;
-    }
-
-    .btn-scan-qr:hover {
-      background: rgba(56, 189, 248, 0.25);
-      transform: translateY(-2px);
+    .btn-liquid.full-width {
+      width: 100%;
     }
 
     /* Live Camera QR Scanner Modal Overlay */
@@ -534,7 +519,7 @@
         <span>I agree to the Butterfly <a href="https://app.encl.asia/privacy" target="_blank" style="color: #fef08a;">Privacy Policy</a> and <a href="https://app.encl.asia/terms" target="_blank" style="color: #fef08a;">Terms of Service</a>.</span>
       </label>
 
-      <button class="btn-liquid" id="acceptBtn" style="width: 100%; opacity: 0.5;" disabled onclick="acceptPrivacyConsent()">
+      <button class="btn-liquid full-width" id="acceptBtn" style="opacity: 0.5;" disabled onclick="acceptPrivacyConsent()">
         Accept & Continue
       </button>
     </div>
@@ -558,9 +543,10 @@
           Instant Camera QR Pairing
         </div>
 
-        <button class="btn-scan-qr" onclick="startQrCamera()">
-          <iconify-icon icon="heroicons:camera" width="22"></iconify-icon>
-          Scan QR Code with Camera
+        <!-- Uniform Golden Button for Camera Scan -->
+        <button class="btn-liquid full-width" onclick="startQrCamera()">
+          <iconify-icon icon="heroicons:camera" width="20"></iconify-icon>
+          Scan QR Code
         </button>
 
         <div style="text-align: center; font-size: 12px; color: var(--muted); margin: 6px 0;">— OR ENTER 6-DIGIT CODE MANUALLY —</div>
@@ -733,7 +719,6 @@
       document.getElementById(`tab-${tabId}`).classList.add('active');
     }
 
-    // Camera QR Scanner Integration
     function startQrCamera() {
       document.getElementById('qrScannerModal').classList.add('active');
 
@@ -749,7 +734,6 @@
           stopQrCamera();
 
           try {
-            // Check if JSON payload or code string
             let codeToUse = decodedText;
             if (decodedText.startsWith('{')) {
               const parsed = JSON.parse(decodedText);
