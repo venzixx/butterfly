@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, Menu, ipcMain } from 'electron';
+import { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -7,10 +7,12 @@ import RPC from 'discord-rpc';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const LOG_FILE = path.join(__dirname, 'debug.log');
+// Use app userData for logs (safe in ASAR production builds)
+const LOG_DIR = app.isPackaged ? app.getPath('userData') : __dirname;
+const LOG_FILE = path.join(LOG_DIR, 'debug.log');
 function logToFile(msg) {
   const line = `[${new Date().toISOString()}] ${msg}\n`;
-  fs.appendFileSync(LOG_FILE, line);
+  try { fs.appendFileSync(LOG_FILE, line); } catch (e) { /* ignore */ }
   console.log(line.trim());
 }
 
@@ -26,9 +28,13 @@ const APP_BRAND_LOGOS = {
   'com.instagram.android': 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/instagram.png',
   'com.reddit.frontpage': 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/reddit.png',
   'com.whatsapp': 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/whatsapp.png',
+  'com.duolingo': 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/duolingo.png',
+  'com.soundcloud.android': 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/soundcloud.png',
+  'com.zhiliaoapp.musically': 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/tiktok.png',
 };
 
 let mainWindow = null;
+let tray = null;
 let rpcClient = null;
 let rpcConnected = false;
 
@@ -40,6 +46,7 @@ function createWindow() {
     resizable: false,
     frame: true,
     title: 'Butterfly 🦋 — Discord Mobile Presence',
+    // icon will use electron default
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -63,15 +70,107 @@ function createWindow() {
   });
 }
 
+function createTray() {
+  // Create a programmatic tray icon (yellow on transparent, 16x16)
+  const trayIcon = nativeImage.createFromDataURL(
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA2ElEQVQ4T2NkoBAwUqifgWoGMDIyiv7//3/Z////TYl1BdgLjIz/FzEwMIh8/Phx+d27d5mINQTsBUZGpkX//zNIMDAwMH79+nX5nTt3mIg1BOIF/P//S/z//18CpPj///8MX79+Xf7//38mokMB7AX8BjAy/l/EwMAgSmgUgbzAwMDABIpEkGaQK0C0yH8GBgZikCjIC6AowOUFBgaG/4wMDIxMhNRTzQCquoJxEdj5/5cwMDAokhIKYC+QGgq4vICrVhZ5gdoGMBIbqeR4gWqhQHIaoBQAAKnVfhGVHnNFAAAAAElFTkSuQmCC'
+  );
+
+  tray = new Tray(trayIcon);
+  tray.setToolTip('Butterfly — Discord Mobile Presence');
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show Butterfly',
+      click: () => {
+        if (mainWindow) {
+          mainWindow.show();
+          mainWindow.focus();
+        }
+      },
+    },
+    {
+      label: `Discord RPC: ${rpcConnected ? '🟢 Connected' : '🔴 Disconnected'}`,
+      enabled: false,
+    },
+    { type: 'separator' },
+    {
+      label: 'Reconnect Discord',
+      click: () => {
+        initDiscordRPC();
+      },
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit Butterfly',
+      click: () => {
+        app.isQuitting = true;
+        app.quit();
+      },
+    },
+  ]);
+
+  tray.setContextMenu(contextMenu);
+
+  tray.on('double-click', () => {
+    if (mainWindow) {
+      mainWindow.show();
+      mainWindow.focus();
+    }
+  });
+}
+
+function updateTrayMenu() {
+  if (!tray) return;
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Show Butterfly',
+      click: () => {
+        if (mainWindow) {
+          mainWindow.show();
+          mainWindow.focus();
+        }
+      },
+    },
+    {
+      label: `Discord RPC: ${rpcConnected ? '🟢 Connected' : '🔴 Disconnected'}`,
+      enabled: false,
+    },
+    { type: 'separator' },
+    {
+      label: 'Reconnect Discord',
+      click: () => {
+        initDiscordRPC();
+      },
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit Butterfly',
+      click: () => {
+        app.isQuitting = true;
+        app.quit();
+      },
+    },
+  ]);
+  tray.setContextMenu(contextMenu);
+}
+
 function sendRpcStatusToUI(status, details = '') {
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.webContents.send('DISCORD_RPC_STATUS_CHANGE', { status, details });
   }
+  updateTrayMenu();
 }
 
 function initDiscordRPC() {
   logToFile('Initializing Discord RPC...');
   try {
+    // Close old client if exists
+    if (rpcClient) {
+      try { rpcClient.destroy(); } catch (e) { /* ignore */ }
+      rpcClient = null;
+    }
+
     RPC.register(DISCORD_CLIENT_ID);
     rpcClient = new RPC.Client({ transport: 'ipc' });
 
@@ -122,12 +221,9 @@ function updateDiscordPresence(data) {
     }
 
     const startSec = Math.floor((data.startedAt || Date.now()) / 1000);
-    const logoUrl = APP_BRAND_LOGOS[data.packageName] || 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/android.png';
+    // Use dynamic logoUrl if provided, fallback to brand map, then default Android icon
+    const logoUrl = data.logoUrl || APP_BRAND_LOGOS[data.packageName] || 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/android.png';
 
-    // Format presence payload matching exact requested layout:
-    // Line 1: Details -> "Netflix"
-    // Line 2: State -> "On Android Phone"
-    // Large Image: Brand Logo URL
     const activityPayload = {
       details: data.appName,
       state: 'On Android Phone',
@@ -165,8 +261,14 @@ ipcMain.on('GET_RPC_STATUS', () => {
   sendRpcStatusToUI(rpcConnected ? 'connected' : 'disconnected');
 });
 
+// Properly handle quit lifecycle
+app.on('before-quit', () => {
+  app.isQuitting = true;
+});
+
 app.whenReady().then(() => {
   createWindow();
+  createTray();
   initDiscordRPC();
 
   app.on('activate', () => {

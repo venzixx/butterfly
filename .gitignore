@@ -3,10 +3,11 @@ node_modules/
 .pnp
 .pnp.js
 
-# Build logs
+# Build logs & outputs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+desktop/dist/
 
 # Environment & OS
 .DS_Store

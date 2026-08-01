@@ -6,6 +6,7 @@ import QRCode from 'qrcode';
 import crypto from 'crypto';
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(cors());
 app.use(express.json());
 
@@ -41,6 +42,16 @@ app.get('/', (req, res) => {
       </body>
     </html>
   `);
+});
+
+// Health check endpoint for monitors and Render
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    uptime: process.uptime(),
+    activeSessions: pairings.size,
+    timestamp: Date.now(),
+  });
 });
 
 // App Icon Mapping table (package name / app name -> Iconify icon name)
@@ -246,12 +257,17 @@ app.get('/api/status/:pairingId', (req, res) => {
 
 wss.on('connection', (ws, req) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  const pairingId = url.searchParams.get('pairingId');
+  const wsPairingId = url.searchParams.get('pairingId');
+  ws.isAlive = true;
 
-  console.log(`[WebSocket] Desktop client connected for session: ${pairingId}`);
+  console.log(`[WebSocket] Desktop client connected for session: ${wsPairingId}`);
 
-  if (pairingId && pairings.has(pairingId)) {
-    const session = pairings.get(pairingId);
+  if (wsPairingId && pairings.has(wsPairingId)) {
+    const session = pairings.get(wsPairingId);
+    // Close old socket if exists
+    if (session.desktopWs && session.desktopWs.readyState === WebSocket.OPEN) {
+      try { session.desktopWs.close(); } catch (e) {}
+    }
     session.desktopWs = ws;
 
     ws.send(JSON.stringify({
@@ -260,6 +276,8 @@ wss.on('connection', (ws, req) => {
       lastActivity: session.lastActivity,
     }));
   }
+
+  ws.on('pong', () => { ws.isAlive = true; });
 
   ws.on('message', (message) => {
     try {
@@ -270,10 +288,41 @@ wss.on('connection', (ws, req) => {
     } catch (e) {}
   });
 
+  ws.on('error', (err) => {
+    console.log(`[WebSocket] Error: ${err.message}`);
+  });
+
   ws.on('close', () => {
-    console.log(`[WebSocket] Desktop client disconnected for session: ${pairingId}`);
+    console.log(`[WebSocket] Desktop client disconnected for session: ${wsPairingId}`);
+    if (wsPairingId && pairings.has(wsPairingId)) {
+      const session = pairings.get(wsPairingId);
+      if (session.desktopWs === ws) session.desktopWs = null;
+    }
   });
 });
+
+// Keep-alive ping every 30s to prevent Render from dropping idle connections
+const wsKeepAlive = setInterval(() => {
+  wss.clients.forEach((ws) => {
+    if (!ws.isAlive) return ws.terminate();
+    ws.isAlive = false;
+    ws.ping();
+  });
+}, 30000);
+
+// Session TTL cleanup: remove sessions older than 1 hour
+setInterval(() => {
+  const now = Date.now();
+  const TTL = 60 * 60 * 1000; // 1 hour
+  for (const [id, session] of pairings) {
+    if (now - session.createdAt > TTL) {
+      if (session.desktopWs) try { session.desktopWs.close(); } catch (e) {}
+      codeToPairingId.delete(session.code);
+      pairings.delete(id);
+      console.log(`[Cleanup] Expired session ${session.code} (${id})`);
+    }
+  }
+}, 5 * 60 * 1000); // Run every 5 minutes
 
 const PORT = process.env.PORT || 10000;
 server.listen(PORT, () => {

@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Butterfly 🦋 Mobile</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Butterfly 🦋</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#07090e">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Iconify & HTML5 QR Code Scanner -->
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
 
@@ -37,47 +39,45 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
+    html, body {
       background: #040508;
       color: var(--text);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
     .app-viewport {
       width: 100%;
-      max-width: 420px;
-      height: 100vh;
-      max-height: 850px;
+      height: 100%;
       background: #080a10;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(250, 204, 21, 0.12);
-      border-radius: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    @media (max-width: 450px) {
+    /* Desktop preview frame */
+    @media (min-width: 451px) {
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       .app-viewport {
-        max-width: 100%;
+        max-width: 420px;
         height: 100vh;
-        max-height: 100vh;
-        border-radius: 0;
-        border: none;
+        max-height: 850px;
+        border-radius: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(250, 204, 21, 0.12);
       }
     }
 
     .liquid-orb-1 {
       position: absolute;
-      top: -80px;
-      left: -60px;
-      width: 300px;
-      height: 300px;
+      top: -80px; left: -60px;
+      width: 300px; height: 300px;
       background: radial-gradient(circle, rgba(250, 204, 21, 0.18) 0%, rgba(7, 9, 14, 0) 70%);
       filter: blur(60px);
       pointer-events: none;
@@ -86,10 +86,8 @@
 
     .liquid-orb-2 {
       position: absolute;
-      bottom: 80px;
-      right: -60px;
-      width: 320px;
-      height: 320px;
+      bottom: 80px; right: -60px;
+      width: 320px; height: 320px;
       background: radial-gradient(circle, rgba(56, 189, 248, 0.16) 0%, rgba(7, 9, 14, 0) 70%);
       filter: blur(70px);
       pointer-events: none;
@@ -102,7 +100,8 @@
     }
 
     .header {
-      padding: 36px 22px 16px 22px;
+      padding: 16px 20px;
+      padding-top: max(env(safe-area-inset-top, 16px), 16px);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -129,55 +128,75 @@
       display: flex;
     }
 
-    .status-badge {
+    .conn-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
       padding: 5px 12px;
       border-radius: 20px;
       font-weight: 700;
+    }
+
+    .conn-indicator.online {
       background: rgba(16, 185, 129, 0.15);
       color: var(--green);
       border: 1px solid rgba(16, 185, 129, 0.3);
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
-    .status-badge.unpaired {
+    .conn-indicator.offline {
       background: rgba(239, 68, 68, 0.15);
       color: var(--red);
-      border-color: rgba(239, 68, 68, 0.3);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .conn-indicator.connecting {
+      background: rgba(250, 204, 21, 0.15);
+      color: var(--yellow);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+    }
+
+    .session-id {
+      font-size: 9px;
+      color: var(--muted);
+      text-align: center;
+      padding: 4px 0;
+      letter-spacing: 0.5px;
+      opacity: 0.6;
     }
 
     .tab-content {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 16px 18px;
+      padding-bottom: 90px;
       display: none;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       z-index: 1;
+      -webkit-overflow-scrolling: touch;
     }
 
     .tab-content.active {
       display: flex;
-      animation: fadeIn 0.25s ease-out forwards;
+      animation: fadeIn 0.2s ease-out forwards;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .glass-card {
       background: var(--card-glass);
       border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 22px;
+      border-radius: 20px;
+      padding: 18px;
       backdrop-filter: blur(24px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       position: relative;
       overflow: hidden;
     }
@@ -190,7 +209,7 @@
     }
 
     .card-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--muted);
       text-transform: uppercase;
@@ -223,7 +242,6 @@
       box-shadow: 0 0 16px rgba(250, 204, 21, 0.2);
     }
 
-    /* Uniform Gold Liquid Button */
     .btn-liquid {
       background: linear-gradient(135deg, #eab308, #ca8a04);
       color: #000;
@@ -241,17 +259,43 @@
       transition: all 0.2s;
     }
 
-    .btn-liquid:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(234, 179, 8, 0.55);
-      background: linear-gradient(135deg, #facc15, #eab308);
+    .btn-liquid:active {
+      transform: scale(0.97);
+      box-shadow: 0 3px 10px rgba(234, 179, 8, 0.4);
     }
 
-    .btn-liquid.full-width {
-      width: 100%;
+    .btn-liquid.full-width { width: 100%; }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: rgba(13, 17, 26, 0.95);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 90%;
     }
 
-    /* Live Camera QR Scanner Modal Overlay */
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success { border-color: rgba(16, 185, 129, 0.4); }
+    .toast.error { border-color: rgba(239, 68, 68, 0.4); }
+
+    /* QR Scanner */
     .qr-scanner-modal {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -263,9 +307,7 @@
       padding: 24px;
     }
 
-    .qr-scanner-modal.active {
-      display: flex;
-    }
+    .qr-scanner-modal.active { display: flex; }
 
     .qr-scanner-header {
       display: flex;
@@ -288,8 +330,7 @@
       border: none;
       color: #fff;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -304,7 +345,7 @@
       box-shadow: 0 0 30px rgba(250, 204, 21, 0.3);
     }
 
-    /* Live Foreground Player Display */
+    /* Player box */
     .player-box {
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid var(--card-border);
@@ -318,8 +359,7 @@
     }
 
     .player-icon-box {
-      width: 72px;
-      height: 72px;
+      width: 72px; height: 72px;
       border-radius: 22px;
       background: rgba(250, 204, 21, 0.12);
       border: 1px solid rgba(250, 204, 21, 0.3);
@@ -332,7 +372,7 @@
     .player-title { font-size: 20px; font-weight: 800; color: #ffffff; }
     .player-sub { font-size: 13px; color: var(--muted); }
 
-    .app-list { display: flex; flex-direction: column; gap: 10px; }
+    .app-list { display: flex; flex-direction: column; gap: 8px; }
 
     .app-item {
       display: flex;
@@ -340,30 +380,30 @@
       justify-content: space-between;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--card-border);
-      padding: 14px 16px;
-      border-radius: 16px;
+      padding: 12px 14px;
+      border-radius: 14px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
 
-    .app-item:hover {
+    .app-item:active {
       background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(56, 189, 248, 0.3);
+      transform: scale(0.98);
     }
 
-    .app-info { display: flex; align-items: center; gap: 14px; }
-    .app-icon { font-size: 26px; display: flex; align-items: center; }
-    .app-name { font-size: 15px; font-weight: 700; }
-    .app-pkg { font-size: 11px; color: var(--muted); }
+    .app-info { display: flex; align-items: center; gap: 12px; }
+    .app-icon { font-size: 24px; display: flex; align-items: center; }
+    .app-name { font-size: 14px; font-weight: 700; }
+    .app-pkg { font-size: 10px; color: var(--muted); }
 
-    .switch { position: relative; display: inline-block; width: 46px; height: 26px; }
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
       position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #374151; transition: .3s; border-radius: 26px;
+      background-color: #374151; transition: .3s; border-radius: 24px;
     }
     .slider:before {
-      position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
       background-color: white; transition: .3s; border-radius: 50%;
     }
     input:checked + .slider { background-color: var(--yellow); }
@@ -373,44 +413,101 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 16px;
+      padding: 12px 14px;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
+      border-radius: 14px;
     }
 
-    .status-row-label { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
-    .status-row-val { font-size: 13px; font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 6px; }
+    .status-row-label { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+    .status-row-val { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .status-row-val.up { color: var(--green); }
+    .status-row-val.down { color: var(--red); }
+    .status-row-val.warn { color: var(--yellow); }
+
+    /* Privacy consent (inline, not blocking) */
+    .consent-banner {
+      background: rgba(250, 204, 21, 0.08);
+      border: 1px solid rgba(250, 204, 21, 0.2);
+      border-radius: 16px;
+      padding: 16px;
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .consent-banner.show { display: flex; }
+
+    .consent-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .consent-text {
+      font-size: 12px;
+      color: #d1d5db;
+      line-height: 1.5;
+    }
+
+    .consent-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .consent-actions button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-consent-accept {
+      background: linear-gradient(135deg, #eab308, #ca8a04);
+      color: #000;
+    }
+
+    .btn-consent-later {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      border: 1px solid var(--card-border) !important;
+    }
 
     .floating-dock {
       position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 32px);
-      height: 64px;
-      background: rgba(13, 17, 26, 0.88);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 32px;
+      bottom: 12px;
+      left: 50%; transform: translateX(-50%);
+      width: calc(100% - 24px);
+      height: 60px;
+      background: rgba(13, 17, 26, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 28px;
       backdrop-filter: blur(30px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(250, 204, 21, 0.1);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(250, 204, 21, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 0 8px;
+      padding: 0 6px;
       z-index: 150;
+      padding-bottom: max(env(safe-area-inset-bottom, 0px), 0px);
     }
 
     .dock-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
+      gap: 2px;
       color: var(--muted);
       cursor: pointer;
       padding: 8px 14px;
-      border-radius: 20px;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 18px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .dock-item iconify-icon { font-size: 22px; }
@@ -422,57 +519,12 @@
       transform: translateY(-2px);
     }
 
-    .modal-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(7, 9, 14, 0.96);
-      backdrop-filter: blur(16px);
-      z-index: 300;
-      display: flex;
-      flex-direction: column;
-      padding: 40px 24px;
-      overflow-y: auto;
+    /* Pulse animation for connecting state */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
-
-    .modal-header { text-align: center; margin-bottom: 20px; }
-    .modal-logo { font-size: 42px; color: var(--yellow); margin-bottom: 8px; }
-    .modal-title { font-size: 22px; font-weight: 800; color: #fff; }
-    .modal-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
-
-    .privacy-box {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 18px;
-      font-size: 13px;
-      color: #d1d5db;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .privacy-box h4 {
-      color: #fef08a;
-      font-size: 15px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .privacy-list { padding-left: 18px; margin-top: 8px; }
-    .privacy-list li { margin-bottom: 6px; }
-
-    .checkbox-label {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      font-size: 12px;
-      color: var(--text);
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
-
-    .checkbox-label input { margin-top: 2px; accent-color: var(--yellow); }
+    .pulse { animation: pulse 1.5s ease-in-out infinite; }
   </style>
 </head>
 <body>
@@ -481,12 +533,15 @@
     <div class="liquid-orb-1"></div>
     <div class="liquid-orb-2"></div>
 
-    <!-- Live Camera QR Scanner Modal -->
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- QR Scanner Modal -->
     <div class="qr-scanner-modal" id="qrScannerModal">
       <div class="qr-scanner-header">
         <div class="qr-scanner-title">
           <iconify-icon icon="heroicons:camera" width="22"></iconify-icon>
-          Point Camera at PC Screen QR Code
+          Scan Desktop QR Code
         </div>
         <button class="btn-close-scan" onclick="stopQrCamera()">
           <iconify-icon icon="heroicons:x-mark" width="20"></iconify-icon>
@@ -494,78 +549,77 @@
       </div>
       <div id="qrVideoReader"></div>
       <p style="text-align: center; font-size: 12px; color: var(--muted); margin-top: 16px;">
-        Scan the QR code displayed on your Butterfly Desktop app.
+        Point your camera at the QR code on Butterfly Desktop.
       </p>
     </div>
 
-    <!-- Onboarding Privacy Consent Modal -->
-    <div class="modal-overlay" id="privacyModal">
-      <div class="modal-header">
-        <div class="modal-logo"><iconify-icon icon="lucide:butterfly"></iconify-icon></div>
-        <div class="modal-title">Welcome to Butterfly</div>
-        <div class="modal-sub">Liquid Privacy & Consent</div>
-      </div>
-
-      <div class="privacy-box">
-        <h4><iconify-icon icon="heroicons:shield-check"></iconify-icon> Your Privacy Comes First</h4>
-        Before pairing, please review how Butterfly handles your data:
-        <ul class="privacy-list">
-          <li><strong>Universal Support:</strong> Tracks any open Android app name (10,000+ apps).</li>
-          <li><strong>Never Collected:</strong> Chat messages, photos, passwords, location, or screen content.</li>
-          <li><strong>Default Blacklist:</strong> WhatsApp, Banking, and Messaging apps are <strong>never</strong> tracked or shared.</li>
-        </ul>
-      </div>
-
-      <label class="checkbox-label">
-        <input type="checkbox" id="consentCheckbox" onchange="toggleAcceptBtn()">
-        <span>I agree to the Butterfly <a href="https://app.encl.asia/privacy" target="_blank" style="color: #fef08a;">Privacy Policy</a> and <a href="https://app.encl.asia/terms" target="_blank" style="color: #fef08a;">Terms of Service</a>.</span>
-      </label>
-
-      <button class="btn-liquid full-width" id="acceptBtn" style="opacity: 0.5;" disabled onclick="acceptPrivacyConsent()">
-        Accept & Continue
-      </button>
-    </div>
-
-    <!-- App Header -->
+    <!-- Header -->
     <div class="header">
       <div class="brand">
         <span class="brand-icon"><iconify-icon icon="lucide:butterfly"></iconify-icon></span>
         Butterfly
       </div>
-      <div class="status-badge unpaired" id="statusTag">
-        <iconify-icon icon="heroicons:signal-slash" width="14"></iconify-icon> UNPAIRED
+      <div class="conn-indicator connecting" id="connBadge">
+        <iconify-icon icon="heroicons:arrow-path" width="14" class="pulse"></iconify-icon>
+        <span id="connText">CONNECTING</span>
       </div>
     </div>
 
-    <!-- TAB 1: PAIRING SCREEN -->
+    <div class="session-id" id="sessionBar">Session: loading...</div>
+
+    <!-- TAB 1: PAIR -->
     <div class="tab-content active" id="tab-pair">
+      <!-- Consent banner (non-blocking) -->
+      <div class="consent-banner" id="consentBanner">
+        <div class="consent-title">
+          <iconify-icon icon="heroicons:shield-check" width="16"></iconify-icon>
+          Privacy & Consent
+        </div>
+        <div class="consent-text">
+          Butterfly only shares your <strong>active app name</strong> with Discord. We never access messages, photos, passwords, or location. Banking & messaging apps are blacklisted by default.
+        </div>
+        <div class="consent-actions">
+          <button class="btn-consent-accept" onclick="acceptConsent()">I Agree</button>
+          <button class="btn-consent-later" onclick="dismissConsent()">Later</button>
+        </div>
+      </div>
+
       <div class="glass-card">
         <div class="card-title">
           <iconify-icon icon="heroicons:qr-code" width="18"></iconify-icon>
-          Instant Camera QR Pairing
+          Pair with Desktop
         </div>
 
-        <!-- Uniform Golden Button for Camera Scan -->
         <button class="btn-liquid full-width" onclick="startQrCamera()">
           <iconify-icon icon="heroicons:camera" width="20"></iconify-icon>
           Scan QR Code
         </button>
 
-        <div style="text-align: center; font-size: 12px; color: var(--muted); margin: 6px 0;">— OR ENTER 6-DIGIT CODE MANUALLY —</div>
+        <div style="text-align: center; font-size: 11px; color: var(--muted); margin: 4px 0;">— OR ENTER CODE —</div>
 
         <div class="pair-input-group">
-          <input type="text" id="codeInput" placeholder="BFLY-1234" value="BFLY-">
-          <button class="btn-liquid" onclick="pairWithCode()">Pair Now</button>
+          <input type="text" id="codeInput" placeholder="BFLY-1234" maxlength="9">
+          <button class="btn-liquid" onclick="pairWithCode()">Pair</button>
+        </div>
+      </div>
+
+      <div class="glass-card" id="pairedInfo" style="display: none;">
+        <div class="card-title" style="color: var(--green);">
+          <iconify-icon icon="heroicons:check-circle" width="18"></iconify-icon>
+          Paired Successfully
+        </div>
+        <div style="font-size: 13px; color: var(--muted);">
+          Your phone is connected to Butterfly Desktop. Switch to the <strong>Tracker</strong> tab to start broadcasting.
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: TRACKER SCREEN -->
+    <!-- TAB 2: TRACKER -->
     <div class="tab-content" id="tab-tracker">
       <div class="glass-card">
         <div class="card-title">
           <iconify-icon icon="heroicons:device-phone-mobile" width="18"></iconify-icon>
-          Foreground App Tracker
+          Live Activity
         </div>
 
         <div class="player-box">
@@ -573,34 +627,33 @@
             <iconify-icon id="currentAppIcon" icon="heroicons:device-phone-mobile" style="color: var(--yellow);"></iconify-icon>
           </div>
           <div>
-            <div class="player-title" id="currentAppName">Lock Screen</div>
-            <div class="player-sub" id="currentAppSub">Tap any app in Privacy tab to test live status</div>
+            <div class="player-title" id="currentAppName">No App Selected</div>
+            <div class="player-sub" id="currentAppSub">Tap an app in Privacy tab to broadcast</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TAB 3: PRIVACY RULES SCREEN -->
+    <!-- TAB 3: PRIVACY -->
     <div class="tab-content" id="tab-privacy">
       <div class="glass-card">
         <div class="card-title">
           <iconify-icon icon="heroicons:shield-check" width="18"></iconify-icon>
-          Installed App Rules
+          App Privacy Rules
         </div>
 
-        <input type="text" id="mobileSearchInput" placeholder="Filter installed apps..." oninput="filterMobileApps()">
+        <input type="text" id="mobileSearchInput" placeholder="Search apps..." oninput="filterMobileApps()">
 
-        <div class="app-list" id="appList">
-        </div>
+        <div class="app-list" id="appList"></div>
       </div>
     </div>
 
-    <!-- TAB 4: IN-APP STATUS SCREEN -->
+    <!-- TAB 4: STATUS -->
     <div class="tab-content" id="tab-status">
       <div class="glass-card">
         <div class="card-title">
           <iconify-icon icon="heroicons:signal" width="18"></iconify-icon>
-          In-App System Health
+          System Health
         </div>
 
         <div class="status-row">
@@ -608,8 +661,8 @@
             <iconify-icon icon="heroicons:cloud" style="color: var(--yellow);"></iconify-icon>
             Cloud Server
           </div>
-          <div class="status-row-val">
-            <iconify-icon icon="heroicons:check-circle"></iconify-icon> Online
+          <div class="status-row-val up" id="srvStatus">
+            <iconify-icon icon="heroicons:check-circle"></iconify-icon> Checking...
           </div>
         </div>
 
@@ -618,8 +671,8 @@
             <iconify-icon icon="heroicons:bolt" style="color: var(--yellow);"></iconify-icon>
             WebSocket Relay
           </div>
-          <div class="status-row-val">
-            <iconify-icon icon="heroicons:check-circle"></iconify-icon> Active
+          <div class="status-row-val warn" id="wsStatus">
+            <iconify-icon icon="heroicons:arrow-path"></iconify-icon> —
           </div>
         </div>
 
@@ -628,40 +681,47 @@
             <iconify-icon icon="heroicons:clock" style="color: var(--yellow);"></iconify-icon>
             Response Latency
           </div>
-          <div class="status-row-val" id="inAppPing">
-            38ms
+          <div class="status-row-val up" id="latencyVal">
+            — ms
           </div>
         </div>
 
         <div class="status-row">
           <div class="status-row-label">
-            <iconify-icon icon="logos:discord-icon"></iconify-icon>
-            Discord Gateway
+            <iconify-icon icon="heroicons:finger-print" style="color: var(--yellow);"></iconify-icon>
+            Session ID
           </div>
-          <div class="status-row-val">
-            Active IPC
+          <div class="status-row-val" id="sessionDisplay" style="color: var(--blue); font-family: monospace; font-size: 11px;">
+            —
+          </div>
+        </div>
+
+        <div class="status-row">
+          <div class="status-row-label">
+            <iconify-icon icon="heroicons:link" style="color: var(--yellow);"></iconify-icon>
+            Pairing
+          </div>
+          <div class="status-row-val" id="pairStatusVal">
+            <span style="color: var(--muted);">Not paired</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Floating iPhone Navigation Dock -->
+    <!-- Floating Dock -->
     <div class="floating-dock">
       <div class="dock-item active" onclick="switchTab('pair', this)">
         <iconify-icon icon="heroicons:bolt"></iconify-icon>
         <span class="dock-label">Pair</span>
       </div>
-
       <div class="dock-item" onclick="switchTab('tracker', this)">
         <iconify-icon icon="heroicons:device-phone-mobile"></iconify-icon>
         <span class="dock-label">Tracker</span>
       </div>
-
       <div class="dock-item" onclick="switchTab('privacy', this)">
         <iconify-icon icon="heroicons:shield-check"></iconify-icon>
         <span class="dock-label">Privacy</span>
       </div>
-
       <div class="dock-item" onclick="switchTab('status', this)">
         <iconify-icon icon="heroicons:signal"></iconify-icon>
         <span class="dock-label">Status</span>
@@ -670,11 +730,192 @@
   </div>
 
   <script>
+    // ── Config ──
     const SERVER_URL = 'https://butterfly-2dyb.onrender.com';
+
+    // ── Session Management (random ID per session, stored in cookie) ──
+    let sessionId = null;
     let deviceToken = null;
     let pairingId = null;
     let html5QrScanner = null;
+    let isPaired = false;
 
+    function generateSessionId() {
+      const chars = 'abcdef0123456789';
+      let id = '';
+      for (let i = 0; i < 16; i++) id += chars[Math.floor(Math.random() * chars.length)];
+      return id.match(/.{4}/g).join('-');
+    }
+
+    function initSession() {
+      // Check for existing session in localStorage
+      sessionId = localStorage.getItem('butterfly_session_id');
+      deviceToken = localStorage.getItem('butterfly_device_token');
+
+      if (!sessionId) {
+        sessionId = generateSessionId();
+        localStorage.setItem('butterfly_session_id', sessionId);
+      }
+
+      // Show session in UI
+      document.getElementById('sessionBar').textContent = `Session: ${sessionId}`;
+      document.getElementById('sessionDisplay').textContent = sessionId;
+    }
+
+    // ── Toast notifications (not alerts) ──
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.className = `toast ${type}`;
+      const icon = type === 'success' ? 'heroicons:check-circle' : 'heroicons:exclamation-triangle';
+      toast.innerHTML = `<iconify-icon icon="${icon}" width="18" style="color: ${type === 'success' ? 'var(--green)' : 'var(--red)'};"></iconify-icon> ${message}`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ── Consent (non-blocking, shown after app loads) ──
+    function showConsentIfNeeded() {
+      const consent = localStorage.getItem('butterfly_consent');
+      if (consent !== 'granted') {
+        // Show after a brief delay so app renders first
+        setTimeout(() => {
+          document.getElementById('consentBanner').classList.add('show');
+        }, 800);
+      }
+    }
+
+    function acceptConsent() {
+      localStorage.setItem('butterfly_consent', 'granted');
+      document.getElementById('consentBanner').classList.remove('show');
+      showToast('Privacy consent accepted');
+    }
+
+    function dismissConsent() {
+      document.getElementById('consentBanner').classList.remove('show');
+    }
+
+    // ── Server health check ──
+    async function checkServerHealth() {
+      const badge = document.getElementById('connBadge');
+      const connText = document.getElementById('connText');
+      const srvStatus = document.getElementById('srvStatus');
+      const latencyVal = document.getElementById('latencyVal');
+
+      try {
+        const start = performance.now();
+        const res = await fetch(`${SERVER_URL}/`, { method: 'GET', mode: 'cors' });
+        const latency = Math.round(performance.now() - start);
+
+        if (res.ok) {
+          badge.className = 'conn-indicator online';
+          badge.innerHTML = `<iconify-icon icon="heroicons:check-circle" width="14"></iconify-icon><span>ONLINE</span>`;
+          srvStatus.className = 'status-row-val up';
+          srvStatus.innerHTML = '<iconify-icon icon="heroicons:check-circle"></iconify-icon> Online';
+          latencyVal.textContent = `${latency}ms`;
+          latencyVal.className = latency < 500 ? 'status-row-val up' : 'status-row-val warn';
+        } else {
+          throw new Error('Server returned non-OK');
+        }
+      } catch (e) {
+        badge.className = 'conn-indicator offline';
+        badge.innerHTML = `<iconify-icon icon="heroicons:x-circle" width="14"></iconify-icon><span>OFFLINE</span>`;
+        srvStatus.className = 'status-row-val down';
+        srvStatus.innerHTML = '<iconify-icon icon="heroicons:x-circle"></iconify-icon> Unreachable';
+        latencyVal.textContent = '—';
+        latencyVal.className = 'status-row-val down';
+      }
+    }
+
+    // ── Tab switching ──
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
+      el.classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+    }
+
+    // ── QR Camera ──
+    function startQrCamera() {
+      document.getElementById('qrScannerModal').classList.add('active');
+
+      if (!html5QrScanner) {
+        html5QrScanner = new Html5Qrcode("qrVideoReader");
+      }
+
+      html5QrScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 220 },
+        (decodedText) => {
+          stopQrCamera();
+          try {
+            let codeToUse = decodedText;
+            if (decodedText.startsWith('{')) {
+              const parsed = JSON.parse(decodedText);
+              codeToUse = parsed.code || decodedText;
+            }
+            document.getElementById('codeInput').value = codeToUse;
+            pairWithCode();
+          } catch (e) {
+            document.getElementById('codeInput').value = decodedText;
+            pairWithCode();
+          }
+        },
+        () => {}
+      ).catch(err => {
+        showToast('Camera access denied: ' + err, 'error');
+        stopQrCamera();
+      });
+    }
+
+    function stopQrCamera() {
+      if (html5QrScanner && html5QrScanner.isScanning) {
+        html5QrScanner.stop().then(() => {
+          document.getElementById('qrScannerModal').classList.remove('active');
+        }).catch(() => {
+          document.getElementById('qrScannerModal').classList.remove('active');
+        });
+      } else {
+        document.getElementById('qrScannerModal').classList.remove('active');
+      }
+    }
+
+    // ── Pairing ──
+    async function pairWithCode() {
+      const code = document.getElementById('codeInput').value.trim();
+      if (!code) return showToast('Enter a pairing code', 'error');
+
+      try {
+        const res = await fetch(`${SERVER_URL}/api/pair/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, sessionId }),
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          deviceToken = data.deviceToken;
+          pairingId = data.pairingId;
+          isPaired = true;
+
+          localStorage.setItem('butterfly_device_token', deviceToken);
+
+          // Update UI
+          const badge = document.getElementById('connBadge');
+          badge.className = 'conn-indicator online';
+          badge.innerHTML = `<iconify-icon icon="heroicons:link" width="14"></iconify-icon><span>PAIRED</span>`;
+
+          document.getElementById('pairedInfo').style.display = 'flex';
+          document.getElementById('pairStatusVal').innerHTML = '<span style="color: var(--green);">✓ Connected</span>';
+
+          showToast('Paired successfully! 🦋');
+        } else {
+          showToast(data.error || 'Invalid code', 'error');
+        }
+      } catch (err) {
+        showToast('Server unreachable — try again', 'error');
+      }
+    }
+
+    // ── App list ──
     const apps = [
       { name: 'Spotify', pkg: 'com.spotify.music', icon: 'logos:spotify-icon', allowed: true },
       { name: 'YouTube', pkg: 'com.google.android.youtube', icon: 'logos:youtube-icon', allowed: true },
@@ -691,88 +932,19 @@
       { name: 'Minecraft', pkg: 'com.mojang.minecraftpe', icon: 'simple-icons:minecraft', allowed: true },
       { name: 'Chrome', pkg: 'com.android.chrome', icon: 'logos:google-chrome', allowed: true },
       { name: 'VS Code', pkg: 'com.visualstudio.code', icon: 'logos:visual-studio-code', allowed: true },
-      { name: 'WhatsApp (Private)', pkg: 'com.whatsapp', icon: 'logos:whatsapp-icon', allowed: false },
+      { name: 'WhatsApp', pkg: 'com.whatsapp', icon: 'logos:whatsapp-icon', allowed: false },
     ];
-
-    function checkConsent() {
-      const consent = localStorage.getItem('butterfly_privacy_consent');
-      if (consent === 'granted') {
-        document.getElementById('privacyModal').style.display = 'none';
-      }
-    }
-
-    function toggleAcceptBtn() {
-      const cb = document.getElementById('consentCheckbox');
-      const btn = document.getElementById('acceptBtn');
-      btn.disabled = !cb.checked;
-      btn.style.opacity = cb.checked ? '1' : '0.5';
-    }
-
-    function acceptPrivacyConsent() {
-      localStorage.setItem('butterfly_privacy_consent', 'granted');
-      document.getElementById('privacyModal').style.display = 'none';
-    }
-
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.dock-item').forEach(d => d.classList.remove('active'));
-      el.classList.add('active');
-
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.getElementById(`tab-${tabId}`).classList.add('active');
-    }
-
-    function startQrCamera() {
-      document.getElementById('qrScannerModal').classList.add('active');
-
-      if (!html5QrScanner) {
-        html5QrScanner = new Html5Qrcode("qrVideoReader");
-      }
-
-      html5QrScanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 220 },
-        (decodedText) => {
-          console.log('[QR Code Scanned]', decodedText);
-          stopQrCamera();
-
-          try {
-            let codeToUse = decodedText;
-            if (decodedText.startsWith('{')) {
-              const parsed = JSON.parse(decodedText);
-              codeToUse = parsed.code || decodedText;
-            }
-            document.getElementById('codeInput').value = codeToUse;
-            pairWithCode();
-          } catch (e) {
-            document.getElementById('codeInput').value = decodedText;
-            pairWithCode();
-          }
-        },
-        (errorMessage) => {}
-      ).catch(err => {
-        alert('Camera access denied or unequipped: ' + err);
-        stopQrCamera();
-      });
-    }
-
-    function stopQrCamera() {
-      if (html5QrScanner) {
-        html5QrScanner.stop().then(() => {
-          document.getElementById('qrScannerModal').classList.remove('active');
-        }).catch(err => {
-          document.getElementById('qrScannerModal').classList.remove('active');
-        });
-      } else {
-        document.getElementById('qrScannerModal').classList.remove('active');
-      }
-    }
 
     function renderApps(items) {
       const container = document.getElementById('appList');
+      if (items.length === 0) {
+        container.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px;">No apps match your search</div>';
+        return;
+      }
       container.innerHTML = items.map(app => `
-        <div class="app-item" onclick="openApp('${app.pkg}', '${app.name}')">
+        <div class="app-item" onclick="broadcastApp('${app.pkg}', '${app.name}')">
           <div class="app-info">
-            <span class="app-icon"><iconify-icon icon="${app.icon}" width="26"></iconify-icon></span>
+            <span class="app-icon"><iconify-icon icon="${app.icon}" width="24"></iconify-icon></span>
             <div>
               <div class="app-name">${app.name}</div>
               <div class="app-pkg">${app.pkg}</div>
@@ -788,36 +960,8 @@
 
     function filterMobileApps() {
       const q = document.getElementById('mobileSearchInput').value.toLowerCase().trim();
-      const filtered = apps.filter(a => a.name.toLowerCase().includes(q) || a.pkg.toLowerCase().includes(q));
-      renderApps(filtered.length ? filtered : apps);
-    }
-
-    async function pairWithCode() {
-      const code = document.getElementById('codeInput').value.trim();
-      if (!code) return alert('Please enter a 6-digit code');
-
-      try {
-        const res = await fetch(`${SERVER_URL}/api/pair/verify`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code }),
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          deviceToken = data.deviceToken;
-          pairingId = data.pairingId;
-
-          const tag = document.getElementById('statusTag');
-          tag.innerHTML = '<iconify-icon icon="heroicons:check-circle" width="14"></iconify-icon> PAIRED';
-          tag.className = 'status-badge';
-          alert('Butterfly Mobile paired successfully!');
-        } else {
-          alert('Pairing failed: ' + data.error);
-        }
-      } catch (err) {
-        alert('Server unreachable');
-      }
+      const filtered = q ? apps.filter(a => a.name.toLowerCase().includes(q) || a.pkg.toLowerCase().includes(q)) : apps;
+      renderApps(filtered);
     }
 
     async function togglePrivacy(pkg, allowed) {
@@ -830,35 +974,45 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ deviceToken, excludedApps }),
-        });
+        }).catch(() => {});
       }
     }
 
-    async function openApp(pkg, name) {
+    async function broadcastApp(pkg, name) {
       const app = apps.find(a => a.pkg === pkg);
-      
+
       document.getElementById('currentAppName').innerText = name;
-      document.getElementById('currentAppSub').innerText = app.allowed ? 'Broadcasting live to Discord' : '🔒 Blacklisted (Hidden from Discord)';
+      document.getElementById('currentAppSub').innerText = app.allowed ? 'Broadcasting live to Discord' : '🔒 Blacklisted — hidden from Discord';
       document.getElementById('currentAppIcon').setAttribute('icon', app.icon);
 
       switchTab('tracker', document.querySelectorAll('.dock-item')[1]);
 
-      if (!deviceToken) return;
+      if (!deviceToken) {
+        showToast('Pair with desktop first', 'error');
+        return;
+      }
 
-      await fetch(`${SERVER_URL}/api/activity`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          deviceToken,
-          packageName: pkg,
-          appName: name,
-        }),
-      });
+      try {
+        await fetch(`${SERVER_URL}/api/activity`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ deviceToken, packageName: pkg, appName: name }),
+        });
+        if (app.allowed) showToast(`Now showing: ${name}`);
+      } catch (e) {
+        showToast('Failed to broadcast', 'error');
+      }
     }
 
+    // ── Init ──
     window.onload = () => {
-      checkConsent();
+      initSession();
       renderApps(apps);
+      checkServerHealth();
+      showConsentIfNeeded();
+
+      // Periodic health check every 30s
+      setInterval(checkServerHealth, 30000);
     };
   </script>
 </body>
